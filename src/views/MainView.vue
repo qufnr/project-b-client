@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
+
+const appName: string = import.meta.env.VITE_APP_NAME
 </script>
 
 <template>
-    <v-empty-state text="Hello world.">
+    <v-empty-state :headline="appName" :text="t('message.subtitle')" :title="t('message.title')">
         <template #actions>
-            <div class="d-flex justify-space-between">
-                <v-btn class="text-capitalize" prepend-icon="login">Sign In</v-btn>
+            <div class="d-flex justify-space-between ga-4">
+                <v-btn class="text-capitalize" prepend-icon="play_arrow">{{ t('text.gettingStart') }}</v-btn>
+                <v-btn class="text-capitalize" prepend-icon="login">{{ t('text.signIn') }}</v-btn>
             </div>
         </template>
     </v-empty-state>

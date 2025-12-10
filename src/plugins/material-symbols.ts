@@ -5,7 +5,14 @@ const currentStyle = 'rounded' as 'rounded' | 'outlined' | 'sharp'
 
 export const materialSymbols: IconSet = {
     component: (props: any) => {
-        return h('span', { class: `material-symbols-${currentStyle}`, 'aria-hidden': 'true' }, props.icon)
+        return h(
+            props.tag,
+            {
+                class: [`material-symbols-${currentStyle}`, props.class],
+                style: props.style,
+            },
+            props.icon
+        )
     }
 }
 
@@ -65,5 +72,7 @@ export const aliases: IconAliases = {
     arrowdown: '',
     arrowleft: '',
     arrowright: '',
-    backspace: ''
+    backspace: '',
+
+    playArrow: 'play_arrow',
 }
