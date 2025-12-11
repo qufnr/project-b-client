@@ -11,11 +11,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 //  View Components
 import MainView from '@/views/MainView.vue'
+import SignView from '@/views/sign/SignView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         { path: '', name: 'main', component: MainView },
+        { path: '/sign', name: 'sign', component: SignView },
     ],
     // routes: setupLayouts(routes),
 })

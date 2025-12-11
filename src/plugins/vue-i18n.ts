@@ -5,14 +5,14 @@ import enUS from '@/locales/en-US.json'
 import koKR from '@/locales/ko-KR.json'
 import jaJP from '@/locales/ja-JP.json'
 
-type MessageSchema = typeof enUS
+type MessageSchema = typeof koKR | typeof enUS | typeof jaJP
 
-export const i18n = createI18n<[MessageSchema], 'en-US' | 'ko-KR' | 'ja-JP'>({
-    locale: 'en-US',
-    fallbackLocale: 'en-US',
+export const i18n = createI18n<[MessageSchema], 'ko-KR' | 'en-US' | 'ja-JP'>({
+    locale: 'ko-KR',
+    fallbackLocale: 'ko-KR',
     messages: {
-        'en-US': enUS,
         'ko-KR': koKR,
+        'en-US': enUS,
         'ja-JP': jaJP,
     }
 })

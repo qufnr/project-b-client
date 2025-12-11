@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'Pretendard Variable';
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+    src: url('../font/PretendardVariable.woff2') format('woff2-variations');
+}
+
+@font-face {
+    font-family: 'Pretendard JP Variable';
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+    src: url('../font/PretendardJPVariable.woff2') format('woff2-variations');
+}
+
+:root, body, #app, .v-application, .v-application * {
+    font-family: 'Pretendard Variable', 'Pretendard JP Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.fs-n1 { font-size: .95rem !important; }
+.fs-n2 { font-size: .9rem !important; }
+.fs-n3 { font-size: .85rem !important; }
+.fs-n4 { font-size: .8rem !important; }
+.fs-n5 { font-size: .75rem !important; }
+.fs-n6 { font-size: .7rem !important; }
+.fs-n7 { font-size: .65rem !important; }
+.fs-n8 { font-size: .6rem !important; }
+.fs-n9 { font-size: .55rem !important; }
+.fs-n10 { font-size: .5rem !important; }
+.fs-0 { font-size: 1rem !important; }
+.fs-1 { font-size: 1.15rem !important; }
+.fs-2 { font-size: 1.2rem !important; }
+.fs-3 { font-size: 1.25rem !important; }
+.fs-4 { font-size: 1.3rem !important; }
+.fs-5 { font-size: 2.35rem !important; }
+.fs-6 { font-size: 2.4rem !important; }
+.fs-7 { font-size: 2.45rem !important; }
+.fs-8 { font-size: 2.5rem !important; }
+.fs-9 { font-size: 2.55rem !important; }
+.fs-10 { font-size: 2.6rem !important; }

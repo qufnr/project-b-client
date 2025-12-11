@@ -45,22 +45,8 @@
         "partyManagement": "Party Management",
         "queueHistory": "Queue History",
         "profile": "Profile",
-        "memberAccount": "Account ID",
-        "memberName": "Name",
-        "memberEmail": "E-Mail",
-        "memberAvatar": "Avatar",
-        "memberBio": "Bio",
-        "memberBirthday": "Birthday",
         "visitDetails": "Visit Details",
         "createdAt": "Joined at {0}",
-        "party": "Party",
-        "partyName": "Party Title",
-        "partyDescription": "Party Description",
-        "partyCreate": "Create Party",
-        "partyDefaultMemberRole": "Default Member Role",
-        "partyVisibility": "Visibility",
-        "partyPublicPrivate": "Public",
-        "partyPassword": "Party Password",
         "visible": "Visible",
         "invisible": "Invisible",
         "private": "Private",
@@ -75,32 +61,48 @@
         "password": "Password",
         "passwordConfirm": "Password Confirm",
         "findPassword": "Find Password",
-        "findAccountOrPassword": "Find Account ID or Password",
+        "findAccountOrPassword": "Find Account or Password",
         "resentVerification": "Resent Verification",
         "dashboard": "Dashboard",
-        "myParties": "My Parties",
-        "partyMember": "Party Members",
-        "partyChat": "Chatting",
-        "partyQueue": "Queues",
-        "queueSearch": "Queue Search",
-        "skip": "Skip"
+        "member": {
+            "_comment": "### 사용자 관련 텍스트 ###",
+            "memberAccount": "Account ID",
+            "memberName": "Name",
+            "memberEmail": "E-Mail",
+            "memberAvatar": "Avatar",
+            "memberBio": "Bio",
+            "memberBirthday": "Birthday"
+        },
+        "party": {
+            "_comment": "### 파티 관련 텍스트 ###",
+            "party": "Party",
+            "partyName": "Party Title",
+            "partyDescription": "Party Description",
+            "partyCreate": "Create Party",
+            "partyDefaultMemberRole": "Default Member Role",
+            "partyVisibility": "Visibility",
+            "partyPublicPrivate": "Public",
+            "partyPassword": "Party Password",
+            "myParties": "My Parties",
+            "partyMember": "Party Members",
+            "partyChat": "Chatting",
+            "partyQueue": "Queues",
+            "queueSearch": "Queue Search",
+            "skip": "Skip"
+        }
     },
     "message": {
+        "_comment": "### 전역 메시지 ###",
         "title": "",
         "subtitle": "Listen, watch, write together, and gather in one space to create a community!",
         "errorDefault": "Oops! An error occurred",
         "notAuthenticated": "Failed to authenticate you. Please sign in again",
         "updated": "Successfully updated",
         "updateFailed": "Failed to update",
-        "noParty": "No party. Be the owner of the first party!",
-        "partyJoining": "Joining the party. Please wait a moment",
-        "partyNotJoined": "You have not joined a party",
-        "partyJoinFailed": "Join failed to party!",
+        "themeApplyOnlyThisBrowser": "Theme settings apply only to this browser",
         "signWelcomeBackLine1": "Welcome back, {0}!",
         "signWelcomeBackLine2": "Please enter your password to verify your identity",
         "signExpired": "Signing session is expired! Please sign in again",
-        "themeApplyOnlyThisBrowser": "Theme settings apply only to this browser",
-        "queueNoResults": "Search to find the queue you want to add",
         "caption": {
             "avatar": "Your profile avatar is visible to all users.",
             "avatarSize": "Recommended avatar size is up to 184 × 184 and under 4MB. Only PNG or non-animated GIFs are allowed.",
@@ -109,20 +111,53 @@
             "validEmail": "Please enter a valid email.",
             "bio": "Briefly introduce yourself and let others know about you.",
             "birthday": "Your birthday can only be set once.",
-            "partyDescription": "Provide a brief description of your party. This will be visible to all users.",
-            "partyVisibility": "If you set your party to 'Hidden,' it will not appear in the party list or search results. This setting can be changed even after creating the party.",
-            "partyPublicPrivate": "If you set your party to private, users can only join if you approve their request. This setting can be changed even after creating the party.",
-            "partyDefaultRole": "You can set the default role for new party members. This setting can be changed even after creating the party.",
-            "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button.",
-            "enterPartyPassword": "If you set the party to private, you can set a password. New members will need to enter the password to send a join request."
+            "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button."
         },
         "placeholder": {
-            "enterName": "Enter your account name",
-            "enterPartyName": "Enter party name",
-            "enterPartyDescription": "Enter party descriptions",
-            "enterPartyPassword": "Enter party password",
-            "date": "MM/DD/YYYY",
-            "enterQueueKeyword": "Enter title or video URL"
+            "date": "MM/DD/YYYY"
+        },
+        "member": {
+            "_comment": "### 사용자 관련 메시지 ###",
+            "placeholder": {
+                "enterId": "Account or Email",
+                "enterName": "Enter your account name"
+            },
+            "caption": {
+                "avatar": "Your profile avatar is visible to all users.",
+                "avatarSize": "Recommended avatar size is up to 184 × 184 and under 4MB. Only PNG or non-animated GIFs are allowed.",
+                "changeName": "Once you change your name, you can only change it again after 3 months. Also, once you change your name, other users may use your previous name. Please consider carefully before making any changes.",
+                "email": "Email cannot be changed. If you have lost access to your email, please contact the administrator.",
+                "validEmail": "Please enter a valid email.",
+                "bio": "Briefly introduce yourself and let others know about you.",
+                "birthday": "Your birthday can only be set once.",
+                "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button."
+            }
+        },
+        "party": {
+            "_comment": "### 파티 관련 메시지 ###",
+            "noParty": "No party. Be the owner of the first party!",
+            "partyJoining": "Joining the party. Please wait a moment",
+            "partyNotJoined": "You have not joined a party",
+            "partyJoinFailed": "Join failed to party!",
+            "queueNoResults": "Search to find the queue you want to add",
+            "partyQueueAdded": "Queue added",
+            "partyQueueDeleted": "Queue deleted",
+            "caption": {
+                "partyDescription": "Provide a brief description of your party. This will be visible to all users.",
+                "partyVisibility": "If you set your party to 'Hidden,' it will not appear in the party list or search results. This setting can be changed even after creating the party.",
+                "partyPublicPrivate": "If you set your party to private, users can only join if you approve their request. This setting can be changed even after creating the party.",
+                "partyDefaultRole": "You can set the default role for new party members. This setting can be changed even after creating the party.",
+                "partyPassword": "If you set the party to private, you can set a password. New members will need to enter the password to send a join request."
+            },
+            "validation": {
+                "selectAddQueue": "추가할 큐를 선택해 주세요"
+            },
+            "placeholder": {
+                "enterPartyName": "Enter party name",
+                "enterPartyDescription": "Enter party descriptions",
+                "enterPartyPassword": "Enter party password",
+                "enterQueueKeyword": "Enter title or video URL"
+            }
         }
     }
 }

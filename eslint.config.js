@@ -5,5 +5,6 @@ export default vuetify({
         'indent': ['error', 4],
         'vue/html-indent': ['error', 4],
         'vue/script-indent': ['error', 4],
+        '@stylistic/keyword-spacing': false
     }
 })
