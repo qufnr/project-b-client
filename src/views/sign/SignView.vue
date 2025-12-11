@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { VForm } from 'vuetify/components'
-import { Validation, type RuleFunction } from '@/utilities/validation'
+import { Validation, type RuleFunction } from '@/utils/validation'
 
 type SignViewState = { tap: number, id: InputValue, password: InputValue }
 type InputValue = { value: string, loading: boolean, rules: RuleFunction[] }

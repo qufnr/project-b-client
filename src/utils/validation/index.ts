@@ -1,5 +1,5 @@
 import { i18n } from '@/plugins/vue-i18n.ts'
-import { StringUtils } from '@/utilities/string'
+import { StringUtils } from '@/utils/string'
 
 const { t } = i18n.global
 
