@@ -1,14 +1,42 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { VForm } from 'vuetify/components'
+import { useDisplay } from 'vuetify'
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { useStorage } from '@vueuse/core'
+import { useSignApi } from '@/composables/api/member-sign/useSignApi.ts'
+import { useMemberStore } from '@/stores/member'
 import { Validation, type RuleFunction } from '@/utils/validation'
+import { cookieNames, storageNames } from '@/construct.ts'
+import { StringUtils } from '@/utils/string'
+import type { CookieChangeOptions } from 'universal-cookie'
+import type { VForm } from 'vuetify/components'
 
 type SignViewState = { tap: number, id: InputValue, password: InputValue }
-type InputValue = { value: string, loading: boolean, rules: RuleFunction[] }
+type InputValue = { value: string, rules: RuleFunction[] }
 
 //  Vue I18n
 const { t } = useI18n()
+
+//  Vuetify
+const { width } = useDisplay()
+
+//  Vueuse Cookies
+//  계정 ID 검증 토큰, 접근 토큰, 리프레시 토큰
+const cookies = useCookies([cookieNames.token.sign, cookieNames.token.access, cookieNames.token.refresh])
+
+//  Vueuse Storage (localStorage)
+//  계정 ID 검증 완료 시 계정 이름 저장할 스토리지
+const memberAlias = useStorage<string | null>(storageNames.signMemberAlias, null)
+
+//  Member Store
+const memberStore = useMemberStore()
+
+//  Sign API Composable
+const {
+    fetchSign, signData, signLoading, signError,
+    fetchAccess, accessData, accessLoading, accessError
+} = useSignApi()
 
 //  계정 입력 폼 참조 객체
 const inputIdForm = ref<VForm>()
@@ -23,7 +51,6 @@ const state = reactive<SignViewState>({
     //  계정 ID
     id: {
         value: '',
-        loading: false,
         rules: [
             Validation.required,
         ]
@@ -31,69 +58,140 @@ const state = reactive<SignViewState>({
     //  계정 비밀번호
     password: {
         value: '',
-        loading: false,
         rules: [
             Validation.required,
         ]
     },
 })
 
+//  카드 타이틀
+const title = computed<string>(() => {
+    switch(state.tap) {
+        case 0: return t('text.signIn')
+        case 1: return t('text.signEnterPassword')
+        case 2: return t('text.signExpired')
+        default: return ''
+    }
+})
+
+const isFullscreen = computed(() => width.value <= 800)
+
 /**
  * 다음, 로그인 눌렀을 때 호출
  */
 async function onNextClick() {
     switch(state.tap) {
+        //  ID 또는 이메일 입력
         case 0: {
             if(!inputIdForm.value)
                 return
 
-            try {
-                state.id.loading = true
+            const { valid } = await inputIdForm.value.validate()
+            if(!valid)
+                return
 
-                const { valid } = await inputIdForm.value.validate()
-                if(!valid)
-                    return
-
-                await new Promise(r => setTimeout(r, 1000))
-
-                state.tap ++
+            await fetchSign(state.id.value)
+            if(!!signData.value) {
+                memberAlias.value = signData.value.name
+                cookies.set(cookieNames.token.sign, signData.value.token, { expires: new Date(signData.value.expiration) })
             }
-            finally {
-                state.id.loading = false
-            }
+
+            state.tap ++
 
             break
         }
 
+        //  비밀번호 입력
         case 1: {
+            if(!inputPasswordForm.value)
+                return
+
+            const { valid } = await inputPasswordForm.value.validate()
+            if(!valid)
+                return
+
+            await fetchAccess(state.password.value)
+            if(!!accessData.value) {
+                memberStore.updateByAccess(accessData.value)
+
+                cookies.set(cookieNames.token.access, accessData.value.access, { expires: new Date(accessData.value.accessExpiration) })
+                cookies.set(cookieNames.token.refresh, accessData.value.refresh, { expires: new Date(accessData.value.refreshExpiration) })
+                cookies.remove(cookieNames.token.sign)
+            }
+
             break
         }
     }
 }
+
+/**
+ * 쿠키 변경 감지
+ *
+ * @param changeOptions 쿠키 변경 옵션
+ */
+const onCookieChange = (changeOptions: CookieChangeOptions) => {
+    //  계정 ID 검증 토큰이 만료되었으면 2번 탭으로 이동
+    if(changeOptions.name === cookieNames.token.sign && !changeOptions.value) {
+        memberAlias.value = null
+        state.tap = 2
+    }
+}
+
+onMounted(() => {
+    if(memberStore.isSigned) {
+        alert('Already signed!')
+    }
+    //  계정 ID 검증 토큰이 존재하면 비밀번호 입력 탭으로 이동
+    else if(!!cookies.get(cookieNames.token.sign) && StringUtils.hasText(memberAlias.value)) {
+        state.tap = 1
+    }
+    else {
+        cookies.remove(cookieNames.token.sign)
+        cookies.remove(cookieNames.token.access)
+        cookies.remove(cookieNames.token.refresh)
+        memberAlias.value = null
+    }
+
+    //  쿠키 변경 감지 이벤트 등록
+    cookies.addChangeListener(onCookieChange)
+})
+
+onUnmounted(() => {
+    cookies.removeChangeListener(onCookieChange)
+})
 </script>
 
 <template>
     <div class="d-flex justify-center align-center h-100">
-        <v-card class="w-50" :loading="state.id.loading || state.password.loading ? 'secondary' : false">
+        <v-card :width="isFullscreen ? '100%' : 720"
+                :loading="signLoading || accessLoading ? 'secondary' : false"
+                :color="isFullscreen ? 'background' : undefined"
+                :flat="isFullscreen"
+        >
             <v-row class="ma-4">
-                <v-col cols="6">
-                    <p class="text-h5">{{ t('text.signIn') }}</p>
+                <v-col :cols="isFullscreen ? 12 : 6">
+                    <p class="text-h5">{{ title }}</p>
+                    <div v-if="state.tap === 1" class="fs-n1">
+                        <p>{{ t('message.signWelcomeBackLine1', [memberAlias]) }}</p>
+                        <p>{{ t('message.signWelcomeBackLine2') }}</p>
+                    </div>
                 </v-col>
-                <v-col cols="6">
-                    <v-window v-model="state.tap">
+                <v-col :cols="isFullscreen ? 12 : 6">
+                    <v-window v-model="state.tap" class="h-100">
                         <v-window-item :value="0">
                             <v-form ref="inputIdForm" class="d-flex flex-column my-2">
                                 <!-- 계정 입력 -->
                                 <v-text-field v-model="state.id.value"
                                               variant="outlined"
-                                              :label="t('message.member.placeholder.enterId')"
-                                              :disabled="state.id.loading"
+                                              :label="t('message.member.label.enterId')"
+                                              :disabled="signLoading"
                                               :rules="state.id.rules"
+                                              :error-messages="signError"
                                 />
                                 <!-- 계정, 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
                                 <div class="text-end">
-                                    <v-btn @click="onNextClick" :disabled="state.id.loading">{{ t('text.next') }}</v-btn>
+                                    <v-btn @click="onNextClick" :disabled="signLoading">{{ t('text.next') }}</v-btn>
                                 </div>
                             </v-form>
                         </v-window-item>
@@ -103,16 +201,22 @@ async function onNextClick() {
                                 <!-- 비밀번호 입력 -->
                                 <v-text-field v-model="state.password.value"
                                               variant="outlined"
-                                              :label="t('message.member.placeholder.enterPassword')"
-                                              :disabled="state.password.loading"
+                                              type="password"
+                                              :label="t('message.member.label.enterPassword')"
+                                              :disabled="accessLoading"
                                               :rules="state.password.rules"
+                                              :error-messages="accessError"
                                 />
                                 <!-- 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
                                 <div class="text-end">
-                                    <v-btn @click="onNextClick" :disabled="state.password.loading">{{ t('text.signIn') }}</v-btn>
+                                    <v-btn @click="onNextClick" :disabled="accessLoading">{{ t('text.signIn') }}</v-btn>
                                 </div>
                             </v-form>
+                        </v-window-item>
+
+                        <v-window-item :value="2">
+                            <p>{{ t('message.signExpired') }}</p>
                         </v-window-item>
                     </v-window>
                 </v-col>

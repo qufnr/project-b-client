@@ -124,8 +124,11 @@
         },
         "member": {
             "_comment": "### 사용자 관련 메시지 ###",
-            "placeholder": {
+            "label": {
                 "enterId": "계정 또는 이메일",
+                "enterPassword": "비밀번호"
+            },
+            "placeholder": {
                 "enterName": "계정 이름을 입력해 주세요"
             },
             "caption": {

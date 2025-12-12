@@ -118,8 +118,11 @@
         },
         "member": {
             "_comment": "### 사용자 관련 메시지 ###",
-            "placeholder": {
+            "label": {
                 "enterId": "Account or Email",
+                "enterPassword": "Password"
+            },
+            "placeholder": {
                 "enterName": "Enter your account name"
             },
             "caption": {

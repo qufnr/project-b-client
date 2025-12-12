@@ -1,28 +1,18 @@
 import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
-import { useCookies } from '@vueuse/integrations'
+import { useCookies } from '@vueuse/integrations/useCookies'
 import router from '@/router'
-import type { ApiResponse, RefreshStatus } from '@/http/types.ts'
+import { storeToRefs } from 'pinia'
+import { useMemberStore } from '@/stores/member'
+import { useSignApi } from '@/composables/api/member-sign/useSignApi.ts'
+import { cookieNames, allowedHeaders } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
+import type { ApiResponse, RefreshStatus } from '@/http/types.ts'
 
 //  API 주소
 const appServerUrl: string = import.meta.env.VITE_APP_SERVER_URL
 
-//  사용자 토큰 관련 쿠키 키값
-const tokenCookieName: { sign: string, access: string, refresh: string } = {
-    sign: import.meta.env.VITE_COOKIE_NAME_MEMBER_SIGN_TOKEN,
-    access: import.meta.env.VITE_COOKIE_NAME_MEMBER_ACCESS_TOKEN,
-    refresh: import.meta.env.VITE_COOKIE_NAME_MEMBER_REFRESH_TOKEN,
-}
-
-//  Authorization Headers
-const authorizationHeaders: { sign: string, access: string, refresh: string } = {
-    sign: import.meta.env.VITE_HTTP_HEADER_SIGN_AUTHORIZATION,
-    access: import.meta.env.VITE_HTTP_HEADER_AUTHORIZATION,
-    refresh: import.meta.env.VITE_HTTP_HEADER_REFRESH_AUTHORIZATION,
-}
-
 //  쿠키
-const cookies = useCookies([tokenCookieName.sign, tokenCookieName.access, tokenCookieName.refresh])
+const cookies = useCookies([cookieNames.token.sign, cookieNames.token.access, cookieNames.token.refresh])
 
 //  리프레시 상태 저장
 const refresh: RefreshStatus = {
@@ -56,18 +46,18 @@ const onRequestFulfilled = (configurer: InternalAxiosRequestConfig) => {
     //  Authorization 토큰 검증
     switch(configurer.url) {
         case "member-management/signs":
-            const signToken = cookies.get<string>(tokenCookieName.sign)
-            configurer.headers[authorizationHeaders.sign] = StringUtils.hasText(signToken) ? `Bearer ${signToken}` : ''
+            const signToken = cookies.get<string>(cookieNames.token.sign)
+            configurer.headers[allowedHeaders.signAuthorization] = StringUtils.hasText(signToken) ? `Bearer ${signToken}` : ''
             break
 
         case "member-management/signs/refresh":
-            const refreshToken = cookies.get<string>(tokenCookieName.refresh)
-            configurer.headers[authorizationHeaders.refresh] = StringUtils.hasText(refreshToken) ? `Bearer ${refreshToken}` : ''
+            const refreshToken = cookies.get<string>(cookieNames.token.refresh)
+            configurer.headers[allowedHeaders.refreshAuthorization] = StringUtils.hasText(refreshToken) ? `Bearer ${refreshToken}` : ''
             break
 
         default:
-            const accessToken = cookies.get<string>(tokenCookieName.access)
-            configurer.headers[authorizationHeaders.access] = StringUtils.hasText(accessToken) ? `Bearer ${accessToken}` : ''
+            const accessToken = cookies.get<string>(cookieNames.token.access)
+            configurer.headers[allowedHeaders.authorization] = StringUtils.hasText(accessToken) ? `Bearer ${accessToken}` : ''
             break
     }
 
@@ -90,18 +80,32 @@ const onRequestRejected = (error: any) => Promise.reject(error)
 const onResponseFulfilled = (response: AxiosResponse) =>
     Promise.resolve<AxiosResponse<ApiResponse<any>>>(response)
 
-const onResponseRejected = async (error: any) => {
-    console.error(error)
+/**
+ * 응답 거부
+ *
+ * @param error Axios 오류 구성
+ * @return 오류 메시지
+ */
+const onResponseRejected = async (error: any): Promise<string> => {
+    console.log("error", error)
+    console.error(error.stack)
 
     //  본문 요청 구성 요소 메모리에 저장
     const originRequest = error.config
 
     //  타임아웃 체크
     if(error.code === 'ERR_NETWORK') {
-        await router.push({ name: 'timeout' })
+        try {
+            await router.push({ name: 'timeout' })
+        }
+        catch(routeError) {
+            console.error('라우트 이동 실패', routeError)
+        }
+
+        return Promise.reject('서버와 연결하는 데 실패했어요')
     }
 
-    //  UNAUTHORIZED 일 경우
+    //  UNAUTHORIZED 일 경우 (접근 토큰 리프레시 처리)
     if(error.response.status === 401 && !originRequest._retry) {
         //  본문 재요청 무한루프 방지
         originRequest._retry = true
@@ -111,7 +115,7 @@ const onResponseRejected = async (error: any) => {
             return new Promise(resolve => {
                 refresh.subscribers.push({
                     callback: (token: string) => {
-                        originRequest.headers[authorizationHeaders.access] = `Bearer ${token}`
+                        originRequest.headers[allowedHeaders.authorization] = `Bearer ${token}`
                         resolve(instance(originRequest))
                     }
                 })
@@ -120,41 +124,45 @@ const onResponseRejected = async (error: any) => {
         refresh.pending = false
 
         try {
-            //  TODO :: 여기서 토큰 리프레시
-            const response = {
-                //  임시 응답...
-                accessToken: '',
-            }
+            const memberStore = useMemberStore()
+            const { member } = storeToRefs(memberStore)
+            const { fetchRefresh } = useSignApi()
+
+            const response = await fetchRefresh()
+            member.value = response.member
+            cookies.set(cookieNames.token.access, response.access, { expires: new Date(response.accessExpiration) })
+            cookies.set(cookieNames.token.refresh, response.refresh, { expires: new Date(response.refreshExpiration) })
 
             //  대기 중이던 구독 재요청 처리
-            onRefreshed(response.accessToken)
+            onRefreshed(cookies.get(cookieNames.token.access))
 
             //  재요청을 위해 해더에 토큰 변경
-            originRequest.headers[authorizationHeaders.access] = `Bearer ${response.accessToken}`
+            originRequest.headers[allowedHeaders.authorization] = `Bearer ${cookies.get(cookieNames.token.access)}`
 
             return instance(originRequest)
         }
         catch(error) {
             console.error('토큰 재발급 실패', error)
 
-            //  TODO :: 여기서 사용자 로그아웃 처리
+            const { clearMember } = useMemberStore()
+            clearMember()
+            cookies.remove(cookieNames.token.sign)
+            cookies.remove(cookieNames.token.access)
+            cookies.remove(cookieNames.token.refresh)
+
             await router.push({ name: 'sign' })
 
-            return Promise.reject({
-                raw: error,
-                message: 'Token sessions is expired! Please try again sign-in.'
-            })
+            return Promise.reject('Token sessions is expired! Please try again sign-in.')
         }
         finally {
             refresh.pending = false
         }
     }
 
-    return Promise.reject({
-        raw: error,
-        //  TODO :: 오류 메시지 파싱
-        message: 'Error message here.'
-    })
+    const response = error.response.data as ApiResponse<any>
+    const message: string = StringUtils.hasText(response.message) ? response.message : error.message
+
+    return Promise.reject(message)
 }
 
 instance.interceptors.request.use(onRequestFulfilled, onRequestRejected)

@@ -16,6 +16,7 @@
         "@mdi/font": "7.4.47",
         "@vueuse/core": "^14.1.0",
         "@vueuse/integrations": "^14.1.0",
+        "async-validator": "^4",
         "axios": "^1.13.2",
         "material-symbols": "^0.40.2",
         "pinia": "^3.0.3",
