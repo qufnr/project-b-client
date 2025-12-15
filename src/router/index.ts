@@ -9,27 +9,67 @@ import { createRouter, createWebHistory } from 'vue-router'
 // import { setupLayouts } from 'virtual:generated-layouts'
 // import { routes } from 'vue-router/auto-routes'
 
+//  Modules
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { StringUtils } from '@/utils/string'
+import { cookieNames, storageNames } from '@/construct.ts'
+
+//  Member Modules
+import { useMemberStore } from '@/stores/member'
+import { useMemberApi } from '@/composables/api/member/useMemberApi.ts'
+
+//  Layout Components
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+
 //  View Components
 import MainView from '@/views/MainView.vue'
 import SignView from '@/views/sign/SignView.vue'
+import SignUpView from '@/views/sign/SignUpView.vue'
+import PartyMainView from '@/views/party/PartyMainView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         { path: '', name: 'main', component: MainView },
         { path: '/sign', name: 'sign', component: SignView },
+        { path: '/sign-up', name: 'sign-up', component: SignUpView },
+        {
+            path: '',
+            component: DefaultLayout,
+            children: [
+                { path: '/party', name: 'party', component: PartyMainView }
+            ]
+        }
     ],
     // routes: setupLayouts(routes),
+})
+
+router.beforeEach(async (to, from, next) => {
+    const cookies = useCookies([cookieNames.token.access, cookieNames.token.refresh])
+    if(StringUtils.hasText(cookies.get(cookieNames.token.access))) {
+        //  TODO :: 테스트 필요
+        const memberStore = useMemberStore()
+        const { data, error, fetchMemberSelf } = useMemberApi()
+
+        await fetchMemberSelf()
+        if(data.value != null) {
+            next()
+        }
+        else {
+            localStorage.setItem(storageNames.signOutReason, error.value ?? '새로고침 도중에 문제가 발생했습니다.')
+            next({ name: 'sign' })
+        }
+    }
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
 router.onError((err, to) => {
     if(err?.message?.includes?.('Failed to fetch dynamically imported module')) {
-        if(localStorage.getItem('vuetify:dynamic-reload')) {
-            console.error('Dynamic import error, reloading page did not fix it', err)
+        if(localStorage.getItem('bserver:dynamic-reload')) {
+            console.error('동적 가져오기 오류, 페이지를 새로고침해도 해결되지 않음', err)
         } else {
-            console.log('Reloading page to fix dynamic import error')
-            localStorage.setItem('vuetify:dynamic-reload', 'true')
+            console.log('동적 가져오기 오류를 해결하기 위해 페이지를 새로 고칩니다')
+            localStorage.setItem('bserver:dynamic-reload', 'true')
             location.assign(to.fullPath)
         }
     } else {
@@ -38,7 +78,7 @@ router.onError((err, to) => {
 })
 
 router.isReady().then(() => {
-    localStorage.removeItem('vuetify:dynamic-reload')
+    localStorage.removeItem('bserver:dynamic-reload')
 })
 
 export default router

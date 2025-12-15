@@ -7,7 +7,8 @@ export const cookieNames = {
 }
 
 export const storageNames = {
-    signMemberAlias: 'bserver.memberAlias'
+    signMemberAlias: 'bserver.memberAlias',
+    signOutReason: 'bserver.forceSignOutReason',
 }
 
 export const allowedHeaders = {

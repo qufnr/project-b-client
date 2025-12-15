@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import { useCookies } from '@vueuse/integrations/useCookies'
@@ -15,11 +16,14 @@ import type { VForm } from 'vuetify/components'
 type SignViewState = { tap: number, id: InputValue, password: InputValue }
 type InputValue = { value: string, rules: RuleFunction[] }
 
+//  Vue Router
+const router = useRouter()
+
 //  Vue I18n
 const { t } = useI18n()
 
 //  Vuetify
-const { width } = useDisplay()
+const { smAndDown } = useDisplay()
 
 //  Vueuse Cookies
 //  계정 ID 검증 토큰, 접근 토큰, 리프레시 토큰
@@ -35,7 +39,7 @@ const memberStore = useMemberStore()
 //  Sign API Composable
 const {
     fetchSign, signData, signLoading, signError,
-    fetchAccess, accessData, accessLoading, accessError
+    fetchAccess, data, loading, error
 } = useSignApi()
 
 //  계정 입력 폼 참조 객체
@@ -47,6 +51,7 @@ const inputPasswordForm = ref<VForm>()
 //  상태 변수
 const state = reactive<SignViewState>({
     //  입력 탭 인덱스
+    //  0 - ID 입력, 1 - 비밀번호 입력, 2 - 로그인 만료, 3 - 이미 로그인된 상태
     tap: 0,
     //  계정 ID
     id: {
@@ -73,8 +78,6 @@ const title = computed<string>(() => {
         default: return ''
     }
 })
-
-const isFullscreen = computed(() => width.value <= 800)
 
 /**
  * 다음, 로그인 눌렀을 때 호출
@@ -111,12 +114,14 @@ async function onNextClick() {
                 return
 
             await fetchAccess(state.password.value)
-            if(!!accessData.value) {
-                memberStore.updateByAccess(accessData.value)
+            if(!!data.value) {
+                memberStore.updateByAccess(data.value)
 
-                cookies.set(cookieNames.token.access, accessData.value.access, { expires: new Date(accessData.value.accessExpiration) })
-                cookies.set(cookieNames.token.refresh, accessData.value.refresh, { expires: new Date(accessData.value.refreshExpiration) })
-                cookies.remove(cookieNames.token.sign)
+                cookies.set(cookieNames.token.access, data.value.access, { expires: new Date(data.value.accessExpiration) })
+                cookies.set(cookieNames.token.refresh, data.value.refresh, { expires: new Date(data.value.refreshExpiration) })
+
+                router.push({ name: 'party' })
+                    .then(() => { cookies.remove(cookieNames.token.sign) })
             }
 
             break
@@ -139,7 +144,7 @@ const onCookieChange = (changeOptions: CookieChangeOptions) => {
 
 onMounted(() => {
     if(memberStore.isSigned) {
-        alert('Already signed!')
+        state.tap = 3
     }
     //  계정 ID 검증 토큰이 존재하면 비밀번호 입력 탭으로 이동
     else if(!!cookies.get(cookieNames.token.sign) && StringUtils.hasText(memberAlias.value)) {
@@ -163,24 +168,25 @@ onUnmounted(() => {
 
 <template>
     <div class="d-flex justify-center align-center h-100">
-        <v-card :width="isFullscreen ? '100%' : 720"
-                :loading="signLoading || accessLoading ? 'secondary' : false"
-                :color="isFullscreen ? 'background' : undefined"
-                :flat="isFullscreen"
+        <v-card :width="smAndDown ? '100%' : 720"
+                :height="smAndDown ? '100%' : 250"
+                :loading="signLoading || loading ? 'secondary' : false"
+                :color="smAndDown ? 'background' : undefined"
+                :flat="smAndDown"
         >
             <v-row class="ma-4">
-                <v-col :cols="isFullscreen ? 12 : 6">
+                <v-col :cols="smAndDown ? 12 : 6">
                     <p class="text-h5">{{ title }}</p>
                     <div v-if="state.tap === 1" class="fs-n1">
                         <p>{{ t('message.signWelcomeBackLine1', [memberAlias]) }}</p>
                         <p>{{ t('message.signWelcomeBackLine2') }}</p>
                     </div>
                 </v-col>
-                <v-col :cols="isFullscreen ? 12 : 6">
+                <v-col :cols="smAndDown ? 12 : 6">
                     <v-window v-model="state.tap" class="h-100">
+                        <!-- 계정 입력 -->
                         <v-window-item :value="0">
                             <v-form ref="inputIdForm" class="d-flex flex-column my-2">
-                                <!-- 계정 입력 -->
                                 <v-text-field v-model="state.id.value"
                                               variant="outlined"
                                               :label="t('message.member.label.enterId')"
@@ -191,32 +197,43 @@ onUnmounted(() => {
                                 <!-- 계정, 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
                                 <div class="text-end">
+                                    <v-btn :to="{ name: 'sign-up' }" variant="text" class="mr-2">{{ t('text.signUp') }}</v-btn>
                                     <v-btn @click="onNextClick" :disabled="signLoading">{{ t('text.next') }}</v-btn>
                                 </div>
                             </v-form>
                         </v-window-item>
 
+                        <!-- 비밀번호 입력 -->
                         <v-window-item :value="1">
                             <v-form ref="inputPasswordForm" class="d-flex flex-column my-2">
-                                <!-- 비밀번호 입력 -->
                                 <v-text-field v-model="state.password.value"
                                               variant="outlined"
                                               type="password"
                                               :label="t('message.member.label.enterPassword')"
-                                              :disabled="accessLoading"
+                                              :disabled="loading"
                                               :rules="state.password.rules"
-                                              :error-messages="accessError"
+                                              :error-messages="error"
                                 />
                                 <!-- 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
                                 <div class="text-end">
-                                    <v-btn @click="onNextClick" :disabled="accessLoading">{{ t('text.signIn') }}</v-btn>
+                                    <v-btn @click="onNextClick" :disabled="loading">{{ t('text.signIn') }}</v-btn>
                                 </div>
                             </v-form>
                         </v-window-item>
 
+                        <!-- 로그인 시간 만료 -->
                         <v-window-item :value="2">
                             <p>{{ t('message.signExpired') }}</p>
+
+                            <div class="text-end">
+                                <v-btn>{{ t('text.signInRetry')}} </v-btn>
+                            </div>
+                        </v-window-item>
+
+                        <!-- 로그인 세션 유효 -->
+                        <v-window-item :value="3">
+
                         </v-window-item>
                     </v-window>
                 </v-col>

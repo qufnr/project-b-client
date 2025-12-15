@@ -19,8 +19,16 @@ export const useMemberApi = () => {
      * @param uid 계정 UID
      * @return API 응답
      */
-    const readMember = async (uid: number): Promise<Member> =>
+    const fetchMember = async (uid: number): Promise<Member> =>
         get(endpoint, { uid })
+
+    /**
+     * 접근 토큰으로 본인 계정 조회
+     *
+     * @return API 응답
+     */
+    const fetchMemberSelf = async (): Promise<Member> =>
+        get(endpoint)
 
     /**
      * 계정 생성
@@ -28,7 +36,7 @@ export const useMemberApi = () => {
      * @param request 생성 요청
      * @return API 응답
      */
-    const createMember = async (request: MemberCreateRequest): Promise<Member> =>
+    const fetchCreateMember = async (request: MemberCreateRequest): Promise<Member> =>
         post(endpoint, { request })
 
     /**
@@ -36,15 +44,16 @@ export const useMemberApi = () => {
      *
      * @param request 수정 요청
      */
-    const updateMember = async (request: MemberUpdateRequest) =>
+    const fetchUpdateMember = async (request: MemberUpdateRequest) =>
         put(endpoint, { request })
 
     return {
         data,
         loading,
         error,
-        readMember,
-        createMember,
-        updateMember,
+        fetchMember,
+        fetchMemberSelf,
+        fetchCreateMember,
+        fetchUpdateMember,
     }
 }

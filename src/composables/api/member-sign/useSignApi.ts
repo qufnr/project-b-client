@@ -6,10 +6,8 @@ const endpoint = 'member-management/signs'
 export const useSignApi = () => {
     const { data: signData, loading: signLoading, error: signError, post: signPost, } =
         useFetch<SignDetails>()
-    const { data: accessData, loading: accessLoading, error: accessError, post: accessPost, } =
-        useFetch<AccessDetails>()
-    const { data: refreshData, loading: refreshLoading, error: refreshError, post: refreshPost, } =
-        useFetch<AccessDetails>()
+
+    const { data, loading, error, post } = useFetch<AccessDetails>()
 
     /**
      * 계정 ID 로그인
@@ -23,16 +21,15 @@ export const useSignApi = () => {
      *
      * @param password 비밀번호
      */
-    const fetchAccess = async (password: string) => await accessPost(endpoint, { password })
+    const fetchAccess = async (password: string) => await post(endpoint, { password })
 
     /**
      * 계정 토큰 리프레시
      */
-    const fetchRefresh = async () => await refreshPost(endpoint)
+    const fetchRefresh = async () => await post(endpoint)
 
     return {
+        data, loading, error, fetchAccess, fetchRefresh,
         signData, signLoading, signError, fetchSign,
-        accessData, accessLoading, accessError, fetchAccess,
-        refreshData, refreshLoading, refreshError, fetchRefresh,
     }
 }
