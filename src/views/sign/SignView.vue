@@ -1,20 +1,41 @@
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useDisplay } from 'vuetify'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useStorage } from '@vueuse/core'
 import { useSignApi } from '@/composables/api/member-sign/useSignApi.ts'
 import { useMemberStore } from '@/stores/member'
+import { useSnackbarStore } from '@/stores/snackbar'
 import { Validation, type RuleFunction } from '@/utils/validation'
 import { cookieNames, storageNames } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
 import type { CookieChangeOptions } from 'universal-cookie'
 import type { VForm } from 'vuetify/components'
 
-type SignViewState = { tap: number, id: InputValue, password: InputValue }
-type InputValue = { value: string, rules: RuleFunction[] }
+//  상태 변수 타입
+interface SignViewState {
+    step: number
+    id: InputValue
+    password: InputValue
+}
+//  입력값 타입
+interface InputValue {
+    value: string
+    rules: RuleFunction[]
+}
+//  화면 반응형 설정 타입
+interface NativeOption {
+    cols: number
+    card: {
+        width?: string | number
+        height?: string | number
+        color?: string
+        flat: boolean
+    }
+}
 
 //  Vue Router
 const router = useRouter()
@@ -35,6 +56,10 @@ const memberAlias = useStorage<string | null>(storageNames.signMemberAlias, null
 
 //  Member Store
 const memberStore = useMemberStore()
+const { member } = storeToRefs(memberStore)
+
+//  Snackbar Store
+const snackbarStore = useSnackbarStore()
 
 //  Sign API Composable
 const {
@@ -52,7 +77,7 @@ const inputPasswordForm = ref<VForm>()
 const state = reactive<SignViewState>({
     //  입력 탭 인덱스
     //  0 - ID 입력, 1 - 비밀번호 입력, 2 - 로그인 만료, 3 - 이미 로그인된 상태
-    tap: 0,
+    step: 0,
     //  계정 ID
     id: {
         value: '',
@@ -71,19 +96,31 @@ const state = reactive<SignViewState>({
 
 //  카드 타이틀
 const title = computed<string>(() => {
-    switch(state.tap) {
+    switch(state.step) {
         case 0: return t('text.signIn')
         case 1: return t('text.signEnterPassword')
         case 2: return t('text.signExpired')
+        case 3: return t('text.keepSigning')
         default: return ''
     }
 })
+
+//  화면 반응형
+const nativeOptions = computed<NativeOption>(() => ({
+    cols: smAndDown.value ? 12 : 6,
+    card: {
+        width: smAndDown.value ? '100%' : 720,
+        height: smAndDown.value ? '100%' : 250,
+        color: smAndDown.value ? 'background' : undefined,
+        flat: smAndDown.value
+    }
+}))
 
 /**
  * 다음, 로그인 눌렀을 때 호출
  */
 async function onNextClick() {
-    switch(state.tap) {
+    switch(state.step) {
         //  ID 또는 이메일 입력
         case 0: {
             if(!inputIdForm.value)
@@ -99,7 +136,7 @@ async function onNextClick() {
                 cookies.set(cookieNames.token.sign, signData.value.token, { expires: new Date(signData.value.expiration) })
             }
 
-            state.tap ++
+            state.step ++
 
             break
         }
@@ -130,25 +167,36 @@ async function onNextClick() {
 }
 
 /**
+ * 로그아웃 클릭
+ */
+function onSignOutClick() {
+    memberStore.clear()
+    cookies.remove(cookieNames.token.access)
+    cookies.remove(cookieNames.token.refresh)
+    state.step = 0
+}
+
+/**
  * 쿠키 변경 감지
  *
  * @param changeOptions 쿠키 변경 옵션
  */
-const onCookieChange = (changeOptions: CookieChangeOptions) => {
+function onCookieChange(changeOptions: CookieChangeOptions) {
     //  계정 ID 검증 토큰이 만료되었으면 2번 탭으로 이동
     if(changeOptions.name === cookieNames.token.sign && !changeOptions.value) {
         memberAlias.value = null
-        state.tap = 2
+        state.step = 2
+        snackbarStore.show({ text: t('message.signExpired'), timeout: 10000 })
     }
 }
 
 onMounted(() => {
     if(memberStore.isSigned) {
-        state.tap = 3
+        state.step = 3
     }
     //  계정 ID 검증 토큰이 존재하면 비밀번호 입력 탭으로 이동
     else if(!!cookies.get(cookieNames.token.sign) && StringUtils.hasText(memberAlias.value)) {
-        state.tap = 1
+        state.step = 1
     }
     else {
         cookies.remove(cookieNames.token.sign)
@@ -168,25 +216,25 @@ onUnmounted(() => {
 
 <template>
     <div class="d-flex justify-center align-center h-100">
-        <v-card :width="smAndDown ? '100%' : 720"
-                :height="smAndDown ? '100%' : 250"
+        <v-card :width="nativeOptions.card.width"
+                :height="nativeOptions.card.height"
                 :loading="signLoading || loading ? 'secondary' : false"
-                :color="smAndDown ? 'background' : undefined"
-                :flat="smAndDown"
+                :color="nativeOptions.card.color"
+                :flat="nativeOptions.card.flat"
         >
             <v-row class="ma-4">
-                <v-col :cols="smAndDown ? 12 : 6">
-                    <p class="text-h5">{{ title }}</p>
-                    <div v-if="state.tap === 1" class="fs-n1">
+                <v-col :cols="nativeOptions.cols" class="d-flex flex-column ga-2">
+                    <p class="text-h5 font-weight-bold">{{ title }}</p>
+                    <div v-if="state.step === 1" class="fs-n1">
                         <p>{{ t('message.signWelcomeBackLine1', [memberAlias]) }}</p>
                         <p>{{ t('message.signWelcomeBackLine2') }}</p>
                     </div>
                 </v-col>
-                <v-col :cols="smAndDown ? 12 : 6">
-                    <v-window v-model="state.tap" class="h-100">
+                <v-col :cols="nativeOptions.cols">
+                    <v-window v-model="state.step" class="">
                         <!-- 계정 입력 -->
                         <v-window-item :value="0">
-                            <v-form ref="inputIdForm" class="d-flex flex-column my-2">
+                            <v-form ref="inputIdForm" class="d-flex flex-column mt-2">
                                 <v-text-field v-model="state.id.value"
                                               variant="outlined"
                                               :label="t('message.member.label.enterId')"
@@ -196,8 +244,9 @@ onUnmounted(() => {
                                 />
                                 <!-- 계정, 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
+                                <v-spacer class="my-4" />
                                 <div class="text-end">
-                                    <v-btn :to="{ name: 'sign-up' }" variant="text" class="mr-2">{{ t('text.signUp') }}</v-btn>
+                                    <v-btn :to="{ name: 'sign-up' }" variant="text" color="secondary" class="mr-2">{{ t('text.signUp') }}</v-btn>
                                     <v-btn @click="onNextClick" :disabled="signLoading">{{ t('text.next') }}</v-btn>
                                 </div>
                             </v-form>
@@ -216,6 +265,7 @@ onUnmounted(() => {
                                 />
                                 <!-- 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
+                                <v-spacer class="my-4" />
                                 <div class="text-end">
                                     <v-btn @click="onNextClick" :disabled="loading">{{ t('text.signIn') }}</v-btn>
                                 </div>
@@ -225,15 +275,28 @@ onUnmounted(() => {
                         <!-- 로그인 시간 만료 -->
                         <v-window-item :value="2">
                             <p>{{ t('message.signExpired') }}</p>
-
+                            <v-spacer class="my-8" />
                             <div class="text-end">
-                                <v-btn>{{ t('text.signInRetry')}} </v-btn>
+                                <v-btn @click="state.step = 0">{{ t('text.signInRetry')}}</v-btn>
                             </div>
                         </v-window-item>
 
                         <!-- 로그인 세션 유효 -->
                         <v-window-item :value="3">
-
+                            <div>
+                                <p>{{ t('message.signSessionAvailable') }}</p>
+                                <v-chip rounded>
+                                    <template #prepend>
+                                        <b-member-avatar-icon :member="member" class="mr-1" />
+                                    </template>
+                                    <p>{{ member.name }}</p>
+                                </v-chip>
+                            </div>
+                            <v-spacer class="my-16" />
+                            <div class="text-end">
+                                <v-btn :to="{ name: 'party' }" variant="text" color="secondary" class="mr-2">{{ t('text.keepSigning') }}</v-btn>
+                                <v-btn @click="onSignOutClick">{{ t('text.signOut') }}</v-btn>
+                            </div>
                         </v-window-item>
                     </v-window>
                 </v-col>

@@ -14,7 +14,12 @@
     src: url('../font/PretendardJPVariable.woff2') format('woff2-variations');
 }
 
-:root, body, #app, .v-application, .v-application * {
+:root,
+body,
+#app,
+//.v-application,
+//.v-application *
+{
     font-family: 'Pretendard Variable', 'Pretendard JP Variable', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 

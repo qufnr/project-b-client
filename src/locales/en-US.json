@@ -58,6 +58,7 @@
         "signUp": "Create Account",
         "signEnterPassword": "Enter Password",
         "signExpired": "Sign Expired!",
+        "keepSigning": "Keep Sign",
         "password": "Password",
         "passwordConfirm": "Password Confirm",
         "findPassword": "Find Password",
@@ -103,6 +104,7 @@
         "signWelcomeBackLine1": "Welcome back, {0}!",
         "signWelcomeBackLine2": "Please enter your password to verify your identity",
         "signExpired": "Signing session is expired! Please sign in again",
+        "signSessionAvailable": "There is already an account logged in.",
         "caption": {
             "avatar": "Your profile avatar is visible to all users.",
             "avatarSize": "Recommended avatar size is up to 184 × 184 and under 4MB. Only PNG or non-animated GIFs are allowed.",

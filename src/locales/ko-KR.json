@@ -58,6 +58,7 @@
         "signUp": "계정 만들기",
         "signEnterPassword": "본인임을 증명하기",
         "signExpired": "엇! 로그인 세션 만료!",
+        "keepSigning": "로그인 유지",
         "password": "비밀번호",
         "passwordConfirm": "비밀번호 확인",
         "findPassword": "비밀번호 찾기",
@@ -103,6 +104,7 @@
         "signWelcomeBackLine1": "다시 돌아오신 것을 환영해요, {0}님!",
         "signWelcomeBackLine2": "본인임을 증명하기 위해 비밀번호를 입력해 주세요",
         "signExpired": "로그인 세션이 만료되었어요, 다시 로그인해 주세요",
+        "signSessionAvailable": "이미 로그인된 계정이 존재해요",
         "validation": {
             "_comment": "### 전역 Validation 메시지 (영어 작업 필요) ###",
             "required": "필수 입력이에요",
