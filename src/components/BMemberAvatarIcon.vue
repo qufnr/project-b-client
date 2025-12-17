@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { Member } from '@/composables/api/member/types.ts'
 
-type BMemberAvatarIconProps = {
+interface BMemberAvatarIconProps {
     member: Member
     size?: number | string
 }

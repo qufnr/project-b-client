@@ -1,7 +1,7 @@
 import type { Member } from '@/composables/api/member/types.ts'
 
 //  ID 인증 로그인 응답
-export type SignDetails = {
+export interface SignDetails {
     id: string
     name: string | null
     token: string
@@ -9,7 +9,7 @@ export type SignDetails = {
 }
 
 //  비밀번호 인증 로그인 응답
-export type AccessDetails = {
+export interface AccessDetails {
     access: string
     accessExpiration: number
     refresh: string

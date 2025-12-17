@@ -1,9 +1,10 @@
 //  사용자 정보
-export type Member = {
+export interface Member {
     uid: number
     id: string
     name: string | null
     bio: string | null
+    colour: string
     avatar: string | null
     banner: string | null
     lastSignedAt: string
@@ -16,13 +17,13 @@ export type Member = {
 }
 
 //  프라이버시
-export type MemberPrivacy = {
+export interface MemberPrivacy {
     isPublic: boolean
     isBirthdayPublic: boolean
 }
 
 //  사용자 생성 요청
-export type MemberCreateRequest = {
+export interface MemberCreateRequest {
     id: string
     name: string | null
     bio: string | null
@@ -32,7 +33,7 @@ export type MemberCreateRequest = {
 }
 
 //  사용자 수정 요청
-export type MemberUpdateRequest = {
+export interface MemberUpdateRequest {
     name: string
     bio: string | null
 }
