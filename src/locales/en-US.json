@@ -68,6 +68,7 @@
         "member": {
             "_comment": "### 사용자 관련 텍스트 ###",
             "memberAccount": "Account ID",
+            "memberAccountOrEmail": "Account or Email",
             "memberName": "Name",
             "memberEmail": "E-Mail",
             "memberAvatar": "Avatar",
@@ -105,6 +106,11 @@
         "signWelcomeBackLine2": "Please enter your password to verify your identity",
         "signExpired": "Signing session is expired! Please sign in again",
         "signSessionAvailable": "There is already an account logged in.",
+        "validation": {
+            "_comment": "### 전역 Validation 메시지 (영어 작업 필요) ###",
+            "required": "This field is mandatory",
+            "maxLength": ""
+        },
         "caption": {
             "avatar": "Your profile avatar is visible to all users.",
             "avatarSize": "Recommended avatar size is up to 184 × 184 and under 4MB. Only PNG or non-animated GIFs are allowed.",
@@ -120,10 +126,6 @@
         },
         "member": {
             "_comment": "### 사용자 관련 메시지 ###",
-            "label": {
-                "enterId": "Account or Email",
-                "enterPassword": "Password"
-            },
             "placeholder": {
                 "enterName": "Enter your account name"
             },

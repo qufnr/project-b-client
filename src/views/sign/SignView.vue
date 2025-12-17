@@ -237,7 +237,7 @@ onUnmounted(() => {
                             <v-form ref="inputIdForm" class="d-flex flex-column mt-2">
                                 <v-text-field v-model="state.id.value"
                                               variant="outlined"
-                                              :label="t('message.member.label.enterId')"
+                                              :label="t('text.member.memberAccountOrEmail')"
                                               :disabled="signLoading"
                                               :rules="state.id.rules"
                                               :error-messages="signError"
@@ -258,7 +258,7 @@ onUnmounted(() => {
                                 <v-text-field v-model="state.password.value"
                                               variant="outlined"
                                               type="password"
-                                              :label="t('message.member.label.enterPassword')"
+                                              :label="t('text.password')"
                                               :disabled="loading"
                                               :rules="state.password.rules"
                                               :error-messages="error"
