@@ -144,8 +144,8 @@ const onResponseRejected = async (error: any): Promise<string> => {
         catch(error) {
             console.error('토큰 재발급 실패', error)
 
-            const { clearMember } = useMemberStore()
-            clearMember()
+            const memberStore = useMemberStore()
+            memberStore.clear()
             cookies.remove(cookieNames.token.sign)
             cookies.remove(cookieNames.token.access)
             cookies.remove(cookieNames.token.refresh)
