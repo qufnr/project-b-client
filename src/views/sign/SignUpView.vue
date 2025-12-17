@@ -129,6 +129,7 @@ async function onNextClick() {
                                               :label="t('text.member.memberEmail')"
                                               :rules="state.email.rules"
                                 />
+                                <p class="text-caption">{{ t('message.member.caption.validEmail') }}</p>
                                 <v-spacer class="my-4" />
                                 <div class="text-end">
                                     <v-btn @click="onNextClick">{{ t('text.next') }}</v-btn>
