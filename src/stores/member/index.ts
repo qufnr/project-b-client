@@ -6,12 +6,13 @@ import { StringUtils } from '@/utils/string'
 import type { Member } from '@/composables/api/member/types.ts'
 import type { SignDetails, AccessDetails } from '@/composables/api/member-sign/types.ts'
 
-export const useMemberStore = defineStore('memberStore', () => {
+export const useMemberStore = defineStore('member', () => {
     const member = ref<Member>({
         authorities: [],
         avatar: null,
         banner: null,
         bio: null,
+        colour: '',
         birthday: null,
         id: '',
         isEnabled: false,
@@ -46,12 +47,13 @@ export const useMemberStore = defineStore('memberStore', () => {
     /**
      * 사용자 정보 삭제 (로그아웃)
      */
-    const clearMember = () => {
+    const clear = () => {
         member.value = {
             authorities: [],
             avatar: null,
             banner: null,
             bio: null,
+            colour: '',
             birthday: null,
             id: '',
             isEnabled: false,
@@ -70,6 +72,6 @@ export const useMemberStore = defineStore('memberStore', () => {
     return {
         member,
         isSigned, memberName,
-        clearMember, updateByAccess
+        clear, updateByAccess
     }
 })
