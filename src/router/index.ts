@@ -10,6 +10,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // import { routes } from 'vue-router/auto-routes'
 
 //  Modules
+import { storeToRefs } from 'pinia'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { StringUtils } from '@/utils/string'
 import { cookieNames, storageNames } from '@/construct.ts'
@@ -47,12 +48,13 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const cookies = useCookies([cookieNames.token.access, cookieNames.token.refresh])
     if(StringUtils.hasText(cookies.get(cookieNames.token.access))) {
-        //  TODO :: 테스트 필요
         const memberStore = useMemberStore()
+        const { member } = storeToRefs(memberStore)
         const { data, error, fetchMemberSelf } = useMemberApi()
 
         await fetchMemberSelf()
         if(data.value != null) {
+            member.value = data.value
             next()
         }
         else {
@@ -60,6 +62,8 @@ router.beforeEach(async (to, from, next) => {
             next({ name: 'sign' })
         }
     }
+
+    next()
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
