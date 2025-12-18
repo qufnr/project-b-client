@@ -166,6 +166,12 @@ async function onNextClick() {
     }
 }
 
+function onSignAnotherAccountClick() {
+    cookies.remove(cookieNames.token.sign)
+    memberAlias.value = null
+    state.step = 0
+}
+
 /**
  * 로그아웃 클릭
  */
@@ -183,7 +189,9 @@ function onSignOutClick() {
  */
 function onCookieChange(changeOptions: CookieChangeOptions) {
     //  계정 ID 검증 토큰이 만료되었으면 2번 탭으로 이동
-    if(changeOptions.name === cookieNames.token.sign && !changeOptions.value) {
+    if(changeOptions.name === cookieNames.token.sign &&
+        !changeOptions.value &&
+        StringUtils.hasText(memberAlias.value)) {
         memberAlias.value = null
         state.step = 2
         snackbarStore.show({ text: t('message.signExpired'), timeout: 10000 })
@@ -267,6 +275,7 @@ onUnmounted(() => {
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
                                 <v-spacer class="my-4" />
                                 <div class="text-end">
+                                    <v-btn @click="onSignAnotherAccountClick" variant="text" class="mr-2">{{ t('text.signInRetryAnotherAccount') }}</v-btn>
                                     <v-btn @click="onNextClick" :disabled="loading">{{ t('text.signIn') }}</v-btn>
                                 </div>
                             </v-form>

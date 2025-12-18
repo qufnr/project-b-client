@@ -55,6 +55,7 @@
         "prev": "이전",
         "signIn": "로그인",
         "signInRetry": "다시 로그인",
+        "signInRetryAnotherAccount": "다른 계정으로 로그인",
         "signUp": "계정 만들기",
         "signEnterPassword": "본인임을 증명하기",
         "signExpired": "엇! 로그인 세션 만료!",

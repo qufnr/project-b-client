@@ -55,6 +55,7 @@
         "prev": "Previous",
         "signIn": "Sign In",
         "signInRetry": "Retry Sign In",
+        "signInRetryAnotherAccount": "Sign In Another Account",
         "signUp": "Create Account",
         "signEnterPassword": "Enter Password",
         "signExpired": "Sign Expired!",
