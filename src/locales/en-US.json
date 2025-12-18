@@ -127,6 +127,9 @@
         },
         "member": {
             "_comment": "### 사용자 관련 메시지 ###",
+            "enterAccountAndEmail": "Enter your account ID and Email",
+            "enterPassword": "Enter your account password",
+            "registerNotice": "You can sign-in using your account ID or email address, and your email address is used to manage your account",
             "placeholder": {
                 "enterName": "Enter your account name"
             },
@@ -135,7 +138,6 @@
                 "avatarSize": "Recommended avatar size is up to 184 × 184 and under 4MB. Only PNG or non-animated GIFs are allowed.",
                 "changeName": "Once you change your name, you can only change it again after 3 months. Also, once you change your name, other users may use your previous name. Please consider carefully before making any changes.",
                 "email": "Email cannot be changed. If you have lost access to your email, please contact the administrator.",
-                "validEmail": "Please enter a valid email.",
                 "bio": "Briefly introduce yourself and let others know about you.",
                 "birthday": "Your birthday can only be set once.",
                 "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button."
