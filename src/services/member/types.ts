@@ -2,14 +2,14 @@
 export interface Member {
     uid: number
     id: string
-    name: string | null
-    bio: string | null
+    name?: string | null
+    bio?: string | null
     colour: string
-    avatar: string | null
-    banner: string | null
+    avatar?: string | null
+    banner?: string | null
     lastSignedAt: string
-    lastNameChangedDate: string | null
-    birthday: string | null
+    lastNameChangedDate?: string | null
+    birthday?: string | null
     isLocked: boolean
     isEnabled: boolean
     isVerified: boolean
