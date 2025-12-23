@@ -11,3 +11,9 @@ export interface RefreshStatus {
     pending: boolean
     subscribers: { callback: (value: string) => any }[]
 }
+
+//  오류 응답 (Axios 인스턴스에서 사용)
+export interface ClientErrorResponse {
+    error: any
+    message: string
+}

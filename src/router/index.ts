@@ -13,11 +13,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { StringUtils } from '@/utils/string'
+import { i18n } from '@/plugins/vue-i18n.ts'
 import { cookieNames, storageNames } from '@/construct.ts'
 
 //  Member Modules
 import { useMemberStore } from '@/stores/member'
-import { useMemberApi } from '@/composables/api/member/useMemberApi.ts'
+import { MemberService } from '@/services/member'
 
 //  Layout Components
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
@@ -27,6 +28,8 @@ import MainView from '@/views/MainView.vue'
 import SignView from '@/views/sign/SignView.vue'
 import SignUpView from '@/views/sign/SignUpView.vue'
 import PartyMainView from '@/views/party/PartyMainView.vue'
+
+const { t } = i18n.global
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,17 +51,15 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const cookies = useCookies([cookieNames.token.access, cookieNames.token.refresh])
     if(StringUtils.hasText(cookies.get(cookieNames.token.access))) {
-        const memberStore = useMemberStore()
-        const { member } = storeToRefs(memberStore)
-        const { data, error, fetchMemberSelf } = useMemberApi()
+        try {
+            const memberStore = useMemberStore()
+            const { member } = storeToRefs(memberStore)
 
-        await fetchMemberSelf()
-        if(data.value != null) {
-            member.value = data.value
+            member.value = await MemberService.read()
             next()
         }
-        else {
-            localStorage.setItem(storageNames.signOutReason, error.value ?? '새로고침 도중에 문제가 발생했습니다.')
+        catch(error: any) {
+            localStorage.setItem(storageNames.signOutReason, error.message)
             next({ name: 'sign' })
         }
     }

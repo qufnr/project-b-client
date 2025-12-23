@@ -12,6 +12,7 @@ export interface Member {
     birthday: string | null
     isLocked: boolean
     isEnabled: boolean
+    isVerified: boolean
     privacy: MemberPrivacy
     authorities: string[]
 }
@@ -25,8 +26,8 @@ export interface MemberPrivacy {
 //  사용자 생성 요청
 export interface MemberCreateRequest {
     id: string
-    name: string | null
-    bio: string | null
+    name?: string
+    bio?: string
     email: string
     password: string
     passwordConfirm: string
@@ -35,5 +36,16 @@ export interface MemberCreateRequest {
 //  사용자 수정 요청
 export interface MemberUpdateRequest {
     name: string
-    bio: string | null
+    bio?: string
+}
+
+//  아이디, 이메일 사용 가능 여부 확인 요청
+export interface MemberCanUseRequest {
+    type: 'ID' | 'EMAIL'
+    value: string
+}
+
+//  아이디, 이메일 사용 가능 여부 응답
+export interface MemberCanUseResponse {
+    canUse: boolean
 }

@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDisplay } from 'vuetify'
-import { type RuleFunction, Validation } from '@/utils/validation'
+import { useDisplay, type ValidationRule } from 'vuetify'
+import { useSnackbarStore } from '@/stores/snackbar'
+import { MemberService } from '@/services/member'
+import { Validation } from '@/utils/validation'
 import type { VForm } from 'vuetify/components'
 
+//  인풋 상태 변수
 interface InputValue {
     value: string
-    rules: RuleFunction[]
+    rules: ValidationRule[]
 }
 
 //  상태 변수 타입
 interface SignUpViewState {
     step: number
+    loading: boolean
     id: InputValue
     email: InputValue
     password: InputValue
@@ -36,6 +40,9 @@ const { t } = useI18n()
 //  Vuetify
 const { smAndDown } = useDisplay()
 
+//  Snackbar Store
+const snackbar = useSnackbarStore()
+
 //  기본 정보 입력 폼
 const accountForm = ref<VForm>()
 //  비밀번호 입력 폼
@@ -44,12 +51,22 @@ const passwordForm = ref<VForm>()
 //  상태 변수
 const state = reactive<SignUpViewState>({
     step: 0,
+    loading: false,
     id: {
         value: '',
         rules: [
             Validation.required,
             v => Validation.minLength(v, 4),
-            v => Validation.maxLength(v, 20)
+            v => Validation.maxLength(v, 20),
+            async v => {
+                try {
+                    const response = await MemberService.canUse({ type: 'ID', value: v })
+                    return response.canUse ? true : t('message.member.alreadyUsingId')
+                }
+                catch(error: any) {
+                    return error.message
+                }
+            }
         ]
     },
     email: {
@@ -57,7 +74,16 @@ const state = reactive<SignUpViewState>({
         rules: [
             Validation.required,
             Validation.email,
-            v => Validation.maxLength(v, 60)
+            v => Validation.maxLength(v, 60),
+            async v => {
+                try {
+                    const response = await MemberService.canUse({ type: 'EMAIL', value: v })
+                    return response.canUse ? true : t('message.member.alreadyUsingEmail')
+                }
+                catch(error: any) {
+                    return error.message
+                }
+            }
         ]
     },
     password: {
@@ -102,11 +128,22 @@ async function onAccountAndEmailSubmit() {
     if(!accountForm.value)
         return
 
-    const { valid } = await accountForm.value.validate()
-    if(!valid)
-        return
+    try {
+        state.loading = true
 
-    state.step ++
+        const { valid } = await accountForm.value.validate()
+        if(!valid)
+            return
+
+        state.step ++
+    }
+    catch(error: any) {
+        console.error(error)
+        snackbar.show({ text: error.message })
+    }
+    finally {
+        state.loading = false
+    }
 }
 
 /**
@@ -116,11 +153,26 @@ async function onAccountPasswordSubmit() {
     if(!passwordForm.value)
         return
 
-    const { valid } = await passwordForm.value.validate()
-    if(!valid)
-        return
+    try {
+        state.loading = true
 
-    //  TODO :: 계정 생성
+        const { valid } = await passwordForm.value.validate()
+        if(!valid)
+            return
+
+        const response = await MemberService.create({
+            id: state.id.value,
+            password: state.password.value,
+            passwordConfirm: state.passwordConfirm.value,
+            email: state.email.value,
+        })
+    }
+    catch(error: any) {
+        snackbar.show({ text: error.message })
+    }
+    finally {
+        state.loading = false
+    }
 }
 </script>
 

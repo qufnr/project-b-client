@@ -1,4 +1,4 @@
-import type { Member } from '@/composables/api/member/types.ts'
+import type { Member } from '@/services/member/types.ts'
 
 //  ID 인증 로그인 응답
 export interface SignDetails {

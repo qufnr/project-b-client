@@ -3,13 +3,13 @@ import { reactive, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import { useDisplay } from 'vuetify'
+import { useDisplay, type ValidationRule } from 'vuetify'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useStorage } from '@vueuse/core'
-import { useSignApi } from '@/composables/api/member-sign/useSignApi.ts'
-import { useMemberStore } from '@/stores/member'
 import { useSnackbarStore } from '@/stores/snackbar'
-import { Validation, type RuleFunction } from '@/utils/validation'
+import { useMemberStore } from '@/stores/member'
+import { SignService } from '@/services/member-sign'
+import { Validation } from '@/utils/validation'
 import { cookieNames, storageNames } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
 import type { CookieChangeOptions } from 'universal-cookie'
@@ -18,13 +18,14 @@ import type { VForm } from 'vuetify/components'
 //  상태 변수 타입
 interface SignViewState {
     step: number
+    loading: boolean
     id: InputValue
     password: InputValue
 }
 //  입력값 타입
 interface InputValue {
     value: string
-    rules: RuleFunction[]
+    rules: ValidationRule[]
 }
 //  화면 반응형 설정 타입
 interface NativeOption {
@@ -61,12 +62,6 @@ const { member } = storeToRefs(memberStore)
 //  Snackbar Store
 const snackbarStore = useSnackbarStore()
 
-//  Sign API Composable
-const {
-    fetchSign, signData, signLoading, signError,
-    fetchAccess, data, loading, error
-} = useSignApi()
-
 //  계정 입력 폼 참조 객체
 const inputIdForm = ref<VForm>()
 
@@ -78,6 +73,8 @@ const state = reactive<SignViewState>({
     //  입력 탭 인덱스
     //  0 - ID 입력, 1 - 비밀번호 입력, 2 - 로그인 만료, 3 - 이미 로그인된 상태
     step: 0,
+    //  로딩 여부
+    loading: false,
     //  계정 ID
     id: {
         value: '',
@@ -120,49 +117,51 @@ const nativeOptions = computed<NativeOption>(() => ({
  * 다음, 로그인 눌렀을 때 호출
  */
 async function onNextClick() {
-    switch(state.step) {
-        //  ID 또는 이메일 입력
-        case 0: {
-            if(!inputIdForm.value)
-                return
+    try {
+        state.loading = true
 
-            const { valid } = await inputIdForm.value.validate()
-            if(!valid)
-                return
+        switch(state.step) {
+            //  ID 또는 이메일 입력
+            case 0: {
+                if(!inputIdForm.value)
+                    return
 
-            await fetchSign(state.id.value)
-            if(!!signData.value) {
-                memberAlias.value = signData.value.name
-                cookies.set(cookieNames.token.sign, signData.value.token, { expires: new Date(signData.value.expiration) })
+                const { valid } = await inputIdForm.value.validate()
+                if(!valid)
+                    return
+
+                const response = await SignService.sign(state.id.value)
+                memberAlias.value = response.name
+
+                state.step ++
+
+                break
             }
 
-            state.step ++
+            //  비밀번호 입력
+            case 1: {
+                if(!inputPasswordForm.value)
+                    return
 
-            break
-        }
+                const { valid } = await inputPasswordForm.value.validate()
+                if(!valid)
+                    return
 
-        //  비밀번호 입력
-        case 1: {
-            if(!inputPasswordForm.value)
-                return
+                const response = await SignService.access(state.password.value)
+                memberStore.updateByAccess(response)
 
-            const { valid } = await inputPasswordForm.value.validate()
-            if(!valid)
-                return
+                await router.push({ name: 'party' })
+                cookies.remove(cookieNames.token.sign)
 
-            await fetchAccess(state.password.value)
-            if(!!data.value) {
-                memberStore.updateByAccess(data.value)
-
-                cookies.set(cookieNames.token.access, data.value.access, { expires: new Date(data.value.accessExpiration) })
-                cookies.set(cookieNames.token.refresh, data.value.refresh, { expires: new Date(data.value.refreshExpiration) })
-
-                router.push({ name: 'party' })
-                    .then(() => { cookies.remove(cookieNames.token.sign) })
+                break
             }
-
-            break
         }
+    }
+    catch(error: any) {
+        snackbarStore.show({ text: error.message })
+    }
+    finally {
+        state.loading = false
     }
 }
 
@@ -226,7 +225,7 @@ onUnmounted(() => {
     <div class="d-flex justify-center align-center h-100">
         <v-card :width="nativeOptions.card.width"
                 :height="nativeOptions.card.height"
-                :loading="signLoading || loading ? 'secondary' : false"
+                :loading="state.loading ? 'secondary' : false"
                 :color="nativeOptions.card.color"
                 :flat="nativeOptions.card.flat"
         >
@@ -246,16 +245,15 @@ onUnmounted(() => {
                                 <v-text-field v-model="state.id.value"
                                               variant="outlined"
                                               :label="t('text.member.memberAccountOrEmail')"
-                                              :disabled="signLoading"
+                                              :disabled="state.loading"
                                               :rules="state.id.rules"
-                                              :error-messages="signError"
                                 />
                                 <!-- 계정, 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
                                 <v-spacer class="my-4" />
                                 <div class="text-end">
                                     <v-btn :to="{ name: 'sign-up' }" variant="text" color="secondary" class="mr-2">{{ t('text.signUp') }}</v-btn>
-                                    <v-btn @click="onNextClick" :disabled="signLoading">{{ t('text.next') }}</v-btn>
+                                    <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.next') }}</v-btn>
                                 </div>
                             </v-form>
                         </v-window-item>
@@ -267,16 +265,15 @@ onUnmounted(() => {
                                               variant="outlined"
                                               type="password"
                                               :label="t('text.password')"
-                                              :disabled="loading"
+                                              :disabled="state.loading"
                                               :rules="state.password.rules"
-                                              :error-messages="error"
                                 />
                                 <!-- 비밀번호 찾기 -->
                                 <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
                                 <v-spacer class="my-4" />
                                 <div class="text-end">
                                     <v-btn @click="onSignAnotherAccountClick" variant="text" class="mr-2">{{ t('text.signInRetryAnotherAccount') }}</v-btn>
-                                    <v-btn @click="onNextClick" :disabled="loading">{{ t('text.signIn') }}</v-btn>
+                                    <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.signIn') }}</v-btn>
                                 </div>
                             </v-form>
                         </v-window-item>

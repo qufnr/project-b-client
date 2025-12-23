@@ -1,12 +1,14 @@
-import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosRequestConfig, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import router from '@/router'
-import { storeToRefs } from 'pinia'
+import { i18n } from '@/plugins/vue-i18n.ts'
 import { useMemberStore } from '@/stores/member'
-import { useSignApi } from '@/composables/api/member-sign/useSignApi.ts'
+import { SignService } from '@/services/member-sign'
 import { cookieNames, allowedHeaders } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
-import type { ApiResponse, RefreshStatus } from '@/http/types.ts'
+import type { ApiResponse, RefreshStatus, ClientErrorResponse } from '@/http/types.ts'
+
+const { t } = i18n.global
 
 //  API 주소
 const appServerUrl: string = import.meta.env.VITE_APP_SERVER_URL
@@ -86,8 +88,7 @@ const onResponseFulfilled = (response: AxiosResponse) =>
  * @param error Axios 오류 구성
  * @return 오류 메시지
  */
-const onResponseRejected = async (error: any): Promise<string> => {
-    console.log("error", error)
+const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
     console.error(error.stack)
 
     //  본문 요청 구성 요소 메모리에 저장
@@ -102,7 +103,10 @@ const onResponseRejected = async (error: any): Promise<string> => {
             console.error('라우트 이동 실패', routeError)
         }
 
-        return Promise.reject('서버와 연결하는 데 실패했어요')
+        return Promise.reject({
+            error,
+            message: t('message.networkError')
+        })
     }
 
     //  UNAUTHORIZED 일 경우 (접근 토큰 리프레시 처리)
@@ -125,13 +129,9 @@ const onResponseRejected = async (error: any): Promise<string> => {
 
         try {
             const memberStore = useMemberStore()
-            const { member } = storeToRefs(memberStore)
-            const { fetchRefresh } = useSignApi()
 
-            const response = await fetchRefresh()
-            member.value = response.member
-            cookies.set(cookieNames.token.access, response.access, { expires: new Date(response.accessExpiration) })
-            cookies.set(cookieNames.token.refresh, response.refresh, { expires: new Date(response.refreshExpiration) })
+            const response = await SignService.refresh()
+            memberStore.updateByAccess(response)
 
             //  대기 중이던 구독 재요청 처리
             onRefreshed(cookies.get(cookieNames.token.access))
@@ -152,7 +152,10 @@ const onResponseRejected = async (error: any): Promise<string> => {
 
             await router.push({ name: 'sign' })
 
-            return Promise.reject('Token sessions is expired! Please try again sign-in.')
+            return Promise.reject({
+                error,
+                message: 'Token sessions is expired! Please try again sign-in.'
+            })
         }
         finally {
             refresh.pending = false
@@ -162,10 +165,24 @@ const onResponseRejected = async (error: any): Promise<string> => {
     const response = error.response.data as ApiResponse<any>
     const message: string = StringUtils.hasText(response.message) ? response.message : error.message
 
-    return Promise.reject(message)
+    return Promise.reject({ error, message })
 }
 
 instance.interceptors.request.use(onRequestFulfilled, onRequestRejected)
 instance.interceptors.response.use(onResponseFulfilled, onResponseRejected)
 
-export default instance
+export default {
+    get: async <T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+        (await instance.get<ApiResponse<T>>(url, config)).data,
+
+    post: async <T>(url: string, body?: object | FormData, config?: AxiosRequestConfig): Promise<ApiResponse<T>> =>
+        (await instance.post<ApiResponse<T>>(url, body, config)).data,
+
+    put: async (url: string, body?: object | FormData, config?: AxiosRequestConfig): Promise<void> => {
+        await instance.put<ApiResponse<void>>(url, body, config)
+    },
+
+    delete: async (url: string, config?: AxiosRequestConfig): Promise<void> => {
+        await instance.delete<ApiResponse<void>>(url, config)
+    }
+}

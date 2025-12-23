@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Member } from '@/composables/api/member/types.ts'
+import type { Member } from '@/services/member/types.ts'
 
 interface BMemberAvatarIconProps {
     member: Member

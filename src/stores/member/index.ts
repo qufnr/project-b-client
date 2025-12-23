@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { cookieNames } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
-import type { Member } from '@/composables/api/member/types.ts'
-import type { SignDetails, AccessDetails } from '@/composables/api/member-sign/types.ts'
+import type { Member } from '@/services/member/types.ts'
+import type { SignDetails, AccessDetails } from '@/services/member-sign/types.ts'
 
 export const useMemberStore = defineStore('member', () => {
     const member = ref<Member>({
@@ -17,6 +17,7 @@ export const useMemberStore = defineStore('member', () => {
         id: '',
         isEnabled: false,
         isLocked: false,
+        isVerified: false,
         lastNameChangedDate: null,
         lastSignedAt: "",
         name: null,
@@ -58,6 +59,7 @@ export const useMemberStore = defineStore('member', () => {
             id: '',
             isEnabled: false,
             isLocked: false,
+            isVerified: false,
             lastNameChangedDate: null,
             lastSignedAt: "",
             name: null,

@@ -97,8 +97,6 @@ const powerfulPassword = (value: string): boolean | string => {
     return true
 }
 
-export type RuleFunction = (value: any) => string | boolean
-
 export const Validation = {
     required,
     minLength,
