@@ -1,8 +1,6 @@
 <template>
-    <v-app>
-        <router-view />
-        <snackbar-provider />
-    </v-app>
+    <router-view />
+    <snackbar-provider />
 </template>
 
 <script lang="ts" setup>

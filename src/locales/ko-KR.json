@@ -66,6 +66,11 @@
         "findAccountOrPassword": "계정 또는 비밀번호 찾기",
         "resentVerification": "인증 재전송",
         "dashboard": "대시보드",
+        "route": {
+            "home": "홈",
+            "my": "내 페이지",
+            "myParties": "내 파티"
+        },
         "member": {
             "_comment": "### 사용자 관련 텍스트 ###",
             "memberAccount": "계정 ID",

@@ -1,18 +1,20 @@
 <script setup lang="ts">
-const appName = import.meta.env.VITE_APP_NAME
+import routes from '@/router/routes/routes.json'
+import shortcutRoutes from '@/router/routes/shortcut-routes.json'
+
+const headerProps = {
+    appName: import.meta.env.VITE_APP_NAME,
+    routes,
+    shortcutRoutes
+}
 </script>
 
 <template>
     <v-layout>
-        <v-navigation-drawer color="background">
-            <v-list nav>
-                <v-list-item title="nav drawer" link></v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+        <!-- 해더 내용과 네비게이션 드로어 -->
+        <b-app-header v-bind="headerProps" />
 
-        <v-app-bar :title="appName" color="background"></v-app-bar>
-
-        <v-main>
+        <v-main class="bg-background">
             <v-container>
                 <router-view />
             </v-container>

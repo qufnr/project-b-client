@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BAppHeader: typeof import('./components/layout/BAppHeader.vue')['default']
     BMemberAvatarIcon: typeof import('./components/member/BMemberAvatarIcon.vue')['default']
     BPartyCard: typeof import('./components/party/BPartyCard.vue')['default']
     BPartyIcon: typeof import('./components/party/BPartyIcon.vue')['default']

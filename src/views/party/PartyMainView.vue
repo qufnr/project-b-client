@@ -129,6 +129,9 @@ const parties = [
 </script>
 
 <template>
+    <div>
+        Contents is here.
+    </div>
     <v-row>
         <v-col v-for="(party, i) in parties" :key="i" cols="4">
             <b-party-card :party="party" />

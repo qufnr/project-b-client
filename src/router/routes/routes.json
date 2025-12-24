@@ -1,0 +1,12 @@
+[
+    {
+        "name": "text.route.home",
+        "route": "party",
+        "icon": "home"
+    },
+    {
+        "name": "text.route.my",
+        "route": "member.my",
+        "icon": "account_circle"
+    }
+]
