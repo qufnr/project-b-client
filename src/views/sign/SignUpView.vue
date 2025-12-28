@@ -177,64 +177,66 @@ async function onAccountPasswordSubmit() {
 </script>
 
 <template>
-    <div class="d-flex justify-center align-center h-100">
-        <v-card :width="nativeOptions.card.width"
-                :height="nativeOptions.card.height"
-                :color="nativeOptions.card.color"
-                :flat="nativeOptions.card.flat"
-        >
-            <v-row class="ma-4">
-                <v-col :cols="nativeOptions.cols" class="d-flex flex-column ga-2">
-                    <p class="text-h5 font-weight-bold">{{ t('text.signUp') }}</p>
-                    <p class="fs-n2">{{ subtitle }}</p>
-                </v-col>
-                <v-col :cols="nativeOptions.cols">
-                    <v-window v-model="state.step">
-                        <!-- 계정 아이디, 이메일 입력 -->
-                        <v-window-item :value="0" class="mt-2">
-                            <v-form ref="accountForm">
-                                <v-text-field v-model="state.id.value"
-                                              :label="t('text.member.memberAccount')"
-                                              :rules="state.id.rules"
-                                />
-                                <v-spacer class="my-2" />
-                                <v-text-field v-model="state.email.value"
-                                              :label="t('text.member.memberEmail')"
-                                              :rules="state.email.rules"
-                                />
-                                <p class="text-caption">{{ t('message.member.registerNotice') }}</p>
-                                <v-spacer class="my-4" />
-                                <div class="text-end">
-                                    <v-btn @click="onAccountAndEmailSubmit">{{ t('text.next') }}</v-btn>
-                                </div>
-                            </v-form>
-                        </v-window-item>
+    <v-app>
+        <div class="d-flex justify-center align-center h-100">
+            <v-card :width="nativeOptions.card.width"
+                    :height="nativeOptions.card.height"
+                    :color="nativeOptions.card.color"
+                    :flat="nativeOptions.card.flat"
+            >
+                <v-row class="ma-4">
+                    <v-col :cols="nativeOptions.cols" class="d-flex flex-column ga-2">
+                        <p class="text-h5 font-weight-bold">{{ t('text.signUp') }}</p>
+                        <p class="fs-n2">{{ subtitle }}</p>
+                    </v-col>
+                    <v-col :cols="nativeOptions.cols">
+                        <v-window v-model="state.step">
+                            <!-- 계정 아이디, 이메일 입력 -->
+                            <v-window-item :value="0" class="mt-2">
+                                <v-form ref="accountForm">
+                                    <v-text-field v-model="state.id.value"
+                                                  :label="t('text.member.memberAccount')"
+                                                  :rules="state.id.rules"
+                                    />
+                                    <v-spacer class="my-2" />
+                                    <v-text-field v-model="state.email.value"
+                                                  :label="t('text.member.memberEmail')"
+                                                  :rules="state.email.rules"
+                                    />
+                                    <p class="text-caption">{{ t('message.member.registerNotice') }}</p>
+                                    <v-spacer class="my-4" />
+                                    <div class="text-end">
+                                        <v-btn @click="onAccountAndEmailSubmit">{{ t('text.next') }}</v-btn>
+                                    </div>
+                                </v-form>
+                            </v-window-item>
 
-                        <!-- 비밀번호 입력 -->
-                        <v-window-item :value="1" class="mt-2">
-                            <v-form ref="passwordForm">
-                                <v-text-field v-model="state.password.value"
-                                              :label="t('text.memberPassword')"
-                                              :rules="state.password.rules"
-                                              type="password"
-                                />
-                                <v-spacer class="my-2" />
-                                <v-text-field v-model="state.passwordConfirm.value"
-                                              :label="t('text.memberPasswordConfirm')"
-                                              :rules="state.passwordConfirm.rules"
-                                              type="password"
-                                />
-                                <v-spacer class="my-4" />
-                                <div class="text-end">
-                                    <v-btn @click="onAccountPasswordSubmit">{{ t('text.next') }}</v-btn>
-                                </div>
-                            </v-form>
-                        </v-window-item>
-                    </v-window>
-                </v-col>
-            </v-row>
-        </v-card>
-    </div>
+                            <!-- 비밀번호 입력 -->
+                            <v-window-item :value="1" class="mt-2">
+                                <v-form ref="passwordForm">
+                                    <v-text-field v-model="state.password.value"
+                                                  :label="t('text.memberPassword')"
+                                                  :rules="state.password.rules"
+                                                  type="password"
+                                    />
+                                    <v-spacer class="my-2" />
+                                    <v-text-field v-model="state.passwordConfirm.value"
+                                                  :label="t('text.memberPasswordConfirm')"
+                                                  :rules="state.passwordConfirm.rules"
+                                                  type="password"
+                                    />
+                                    <v-spacer class="my-4" />
+                                    <div class="text-end">
+                                        <v-btn @click="onAccountPasswordSubmit">{{ t('text.next') }}</v-btn>
+                                    </div>
+                                </v-form>
+                            </v-window-item>
+                        </v-window>
+                    </v-col>
+                </v-row>
+            </v-card>
+        </div>
+    </v-app>
 </template>
 
 <style scoped>

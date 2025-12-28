@@ -222,93 +222,95 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="d-flex justify-center align-center h-100">
-        <v-card :width="nativeOptions.card.width"
-                :height="nativeOptions.card.height"
-                :loading="state.loading ? 'secondary' : false"
-                :color="nativeOptions.card.color"
-                :flat="nativeOptions.card.flat"
-        >
-            <v-row class="ma-4">
-                <v-col :cols="nativeOptions.cols" class="d-flex flex-column ga-2">
-                    <p class="text-h5 font-weight-bold">{{ title }}</p>
-                    <div v-if="state.step === 1" class="fs-n1">
-                        <p>{{ t('message.signWelcomeBackLine1', [memberAlias]) }}</p>
-                        <p>{{ t('message.signWelcomeBackLine2') }}</p>
-                    </div>
-                </v-col>
-                <v-col :cols="nativeOptions.cols">
-                    <v-window v-model="state.step" class="">
-                        <!-- 계정 입력 -->
-                        <v-window-item :value="0">
-                            <v-form ref="inputIdForm" class="d-flex flex-column mt-2">
-                                <v-text-field v-model="state.id.value"
-                                              variant="outlined"
-                                              :label="t('text.member.memberAccountOrEmail')"
-                                              :disabled="state.loading"
-                                              :rules="state.id.rules"
-                                />
-                                <!-- 계정, 비밀번호 찾기 -->
-                                <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
-                                <v-spacer class="my-4" />
+    <v-app>
+        <div class="d-flex justify-center align-center h-100">
+            <v-card :width="nativeOptions.card.width"
+                    :height="nativeOptions.card.height"
+                    :loading="state.loading ? 'secondary' : false"
+                    :color="nativeOptions.card.color"
+                    :flat="nativeOptions.card.flat"
+            >
+                <v-row class="ma-4">
+                    <v-col :cols="nativeOptions.cols" class="d-flex flex-column ga-2">
+                        <p class="text-h5 font-weight-bold">{{ title }}</p>
+                        <div v-if="state.step === 1" class="fs-n1">
+                            <p>{{ t('message.signWelcomeBackLine1', [memberAlias]) }}</p>
+                            <p>{{ t('message.signWelcomeBackLine2') }}</p>
+                        </div>
+                    </v-col>
+                    <v-col :cols="nativeOptions.cols">
+                        <v-window v-model="state.step" class="">
+                            <!-- 계정 입력 -->
+                            <v-window-item :value="0">
+                                <v-form ref="inputIdForm" class="d-flex flex-column mt-2">
+                                    <v-text-field v-model="state.id.value"
+                                                  variant="outlined"
+                                                  :label="t('text.member.memberAccountOrEmail')"
+                                                  :disabled="state.loading"
+                                                  :rules="state.id.rules"
+                                    />
+                                    <!-- 계정, 비밀번호 찾기 -->
+                                    <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findAccountOrPassword') }}</router-link>
+                                    <v-spacer class="my-4" />
+                                    <div class="text-end">
+                                        <v-btn :to="{ name: 'sign-up' }" variant="text" color="secondary" class="mr-2">{{ t('text.signUp') }}</v-btn>
+                                        <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.next') }}</v-btn>
+                                    </div>
+                                </v-form>
+                            </v-window-item>
+
+                            <!-- 비밀번호 입력 -->
+                            <v-window-item :value="1">
+                                <v-form ref="inputPasswordForm" class="d-flex flex-column my-2">
+                                    <v-text-field v-model="state.password.value"
+                                                  variant="outlined"
+                                                  type="password"
+                                                  :label="t('text.password')"
+                                                  :disabled="state.loading"
+                                                  :rules="state.password.rules"
+                                    />
+                                    <!-- 비밀번호 찾기 -->
+                                    <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
+                                    <v-spacer class="my-4" />
+                                    <div class="text-end">
+                                        <v-btn @click="onSignAnotherAccountClick" variant="text" class="mr-2">{{ t('text.signInRetryAnotherAccount') }}</v-btn>
+                                        <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.signIn') }}</v-btn>
+                                    </div>
+                                </v-form>
+                            </v-window-item>
+
+                            <!-- 로그인 시간 만료 -->
+                            <v-window-item :value="2">
+                                <p>{{ t('message.signExpired') }}</p>
+                                <v-spacer class="my-8" />
                                 <div class="text-end">
-                                    <v-btn :to="{ name: 'sign-up' }" variant="text" color="secondary" class="mr-2">{{ t('text.signUp') }}</v-btn>
-                                    <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.next') }}</v-btn>
+                                    <v-btn @click="state.step = 0">{{ t('text.signInRetry')}}</v-btn>
                                 </div>
-                            </v-form>
-                        </v-window-item>
+                            </v-window-item>
 
-                        <!-- 비밀번호 입력 -->
-                        <v-window-item :value="1">
-                            <v-form ref="inputPasswordForm" class="d-flex flex-column my-2">
-                                <v-text-field v-model="state.password.value"
-                                              variant="outlined"
-                                              type="password"
-                                              :label="t('text.password')"
-                                              :disabled="state.loading"
-                                              :rules="state.password.rules"
-                                />
-                                <!-- 비밀번호 찾기 -->
-                                <router-link class="text-secondary text-decoration-none mt-2 fs-n2" :to="{ name: 'main' }">{{ t('text.findPassword') }}</router-link>
-                                <v-spacer class="my-4" />
+                            <!-- 로그인 세션 유효 -->
+                            <v-window-item :value="3">
+                                <div>
+                                    <p>{{ t('message.signSessionAvailable') }}</p>
+                                    <v-chip rounded>
+                                        <template #prepend>
+                                            <b-member-avatar-icon :member="member" class="mr-1" />
+                                        </template>
+                                        <p>{{ member.name }}</p>
+                                    </v-chip>
+                                </div>
+                                <v-spacer class="my-16" />
                                 <div class="text-end">
-                                    <v-btn @click="onSignAnotherAccountClick" variant="text" class="mr-2">{{ t('text.signInRetryAnotherAccount') }}</v-btn>
-                                    <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.signIn') }}</v-btn>
+                                    <v-btn :to="{ name: 'party' }" variant="text" color="secondary" class="mr-2">{{ t('text.keepSigning') }}</v-btn>
+                                    <v-btn @click="onSignOutClick">{{ t('text.signOut') }}</v-btn>
                                 </div>
-                            </v-form>
-                        </v-window-item>
-
-                        <!-- 로그인 시간 만료 -->
-                        <v-window-item :value="2">
-                            <p>{{ t('message.signExpired') }}</p>
-                            <v-spacer class="my-8" />
-                            <div class="text-end">
-                                <v-btn @click="state.step = 0">{{ t('text.signInRetry')}}</v-btn>
-                            </div>
-                        </v-window-item>
-
-                        <!-- 로그인 세션 유효 -->
-                        <v-window-item :value="3">
-                            <div>
-                                <p>{{ t('message.signSessionAvailable') }}</p>
-                                <v-chip rounded>
-                                    <template #prepend>
-                                        <b-member-avatar-icon :member="member" class="mr-1" />
-                                    </template>
-                                    <p>{{ member.name }}</p>
-                                </v-chip>
-                            </div>
-                            <v-spacer class="my-16" />
-                            <div class="text-end">
-                                <v-btn :to="{ name: 'party' }" variant="text" color="secondary" class="mr-2">{{ t('text.keepSigning') }}</v-btn>
-                                <v-btn @click="onSignOutClick">{{ t('text.signOut') }}</v-btn>
-                            </div>
-                        </v-window-item>
-                    </v-window>
-                </v-col>
-            </v-row>
-        </v-card>
-    </div>
+                            </v-window-item>
+                        </v-window>
+                    </v-col>
+                </v-row>
+            </v-card>
+        </div>
+    </v-app>
 </template>
 
 <style scoped>
