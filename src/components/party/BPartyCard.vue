@@ -1,16 +1,21 @@
 <script setup lang="ts">
+import type { Guild } from '@/services/guild/types.ts'
+
 interface BPartyCardProps {
-    party: any  //  TODO :: 파티 타입 선정
+    party: Guild    //  TODO :: 파티 타입 선정
 }
 
 const { party } = defineProps<BPartyCardProps>()
 </script>
 
 <template>
-    <v-card class="party-card" color="background" elevation="0">
+    <v-card class="party-card"
+            min-height="360"
+            elevation="0"
+    >
         <!-- 상단 파티 배너 이미지 -->
         <v-img class="party-card__banner"
-               height="200"
+               height="230"
                :src="party.banner"
                cover
         >
@@ -33,7 +38,10 @@ const { party } = defineProps<BPartyCardProps>()
             <v-spacer class="my-2" />
 
             <div class="party-card__etc">
-                <p class="text-caption">members: {{ party.members }}</p>
+                <div v-if="party.">
+
+                </div>
+                <p class="text-caption">members: {{ party.joinedMembers }}</p>
             </div>
         </v-card-text>
     </v-card>
