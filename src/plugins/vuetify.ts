@@ -40,6 +40,7 @@ export default createVuetify({
                     secondary: '#3f8435',
                     surface: '#fff',
                     background: '#fff',
+                    darken: '#7b7b7b',
                 }
             },
             dark: {
@@ -49,6 +50,7 @@ export default createVuetify({
                     secondary: '#50c440',
                     surface: '#282828',
                     background: '#0f0f0f',
+                    darken: '#b4b4b4',
                 }
             }
         }

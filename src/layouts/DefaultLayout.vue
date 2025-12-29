@@ -2,6 +2,7 @@
 import routes from '@/router/routes/routes.json'
 import shortcutRoutes from '@/router/routes/shortcut-routes.json'
 
+//  헤더 프롭
 const headerProps = {
     appName: import.meta.env.VITE_APP_NAME,
     routes,
@@ -14,8 +15,8 @@ const headerProps = {
         <!-- 해더 내용과 네비게이션 드로어 -->
         <b-app-header v-bind="headerProps" />
 
-        <v-main class="bg-background">
-            <v-container>
+        <v-main class="bg-background transition-none" style="min-height: 100vh">
+            <v-container fluid>
                 <router-view />
             </v-container>
         </v-main>

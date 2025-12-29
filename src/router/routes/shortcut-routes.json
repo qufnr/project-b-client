@@ -6,12 +6,12 @@
     },
     {
         "name": "text.route.myParties",
-        "route": "party.my",
+        "route": "party.me",
         "icon": "celebration"
     },
     {
         "name": "text.route.my",
-        "route": "member.my",
+        "route": "member.me",
         "icon": "account_circle"
     }
 ]

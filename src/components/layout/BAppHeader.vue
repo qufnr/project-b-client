@@ -38,7 +38,7 @@ const state = reactive<BAppHeaderState>({
 })
 
 //  네비게이션 드로어 프롭값
-const drawerProps = computed(() => {
+const drawerProps = computed<{ modelValue: boolean, rail: boolean, temporary: boolean }>(() => {
     if(mobile.value)
         return state.drawer.visible
             ? { modelValue: true, rail: false, temporary: true }
@@ -75,22 +75,32 @@ function handleDrawerUpdate(value: boolean) {
     </v-app-bar>
 
     <v-navigation-drawer v-bind="drawerProps"
-                         class="bg-background transition-none"
+                         class="transition-none bg-background"
                          @update:model-value="handleDrawerUpdate"
+                         rail-width="55"
                          disable-resize-watcher
                          floating
     >
-        <v-list nav>
-            <v-list-item v-for="(item, i) in drawerItems" :key="i"
+        <v-row v-if="drawerProps.rail" class="mt-1">
+            <v-col cols="12" v-for="(item, i) in shortcutRoutes" :key="i" class="my-1 py-1">
+                <div class="d-flex flex-column align-center justify-center rounded mx-1 py-1" v-ripple @click="console.log">
+                    <v-icon>{{ item.icon }}</v-icon>
+                    <p class="fs-n6 text-darken">{{ t(item.name) }}</p>
+                </div>
+            </v-col>
+        </v-row>
+        <v-list v-else nav>
+            <v-list-item v-for="(item, i) in routes" :key="i"
                          :prepend-icon="item.icon"
+                         :to="{ name: item.route }"
             >
                 <v-list-item-title>{{ t(item.name )}}</v-list-item-title>
-                <v-list-item-subtitle>{{ t(item.name )}}</v-list-item-subtitle>
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.nav-icon-width-on-rail { width: 60px; }
+.nav-icon-width { width: 20px; }
 </style>
