@@ -76,5 +76,6 @@ export const aliases: IconAliases = {
 
     playArrow: 'play_arrow',
     celebration: 'celebration',
-    accountCircle: 'account_circle'
+    accountCircle: 'account_circle',
+    musicNote: 'music_note',
 }

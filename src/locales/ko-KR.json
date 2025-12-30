@@ -18,6 +18,11 @@
             "minutes": "{0}분 전",
             "seconds": "방금"
         },
+        "mediaType": {
+            "youtube": "YouTube",
+            "soundcloud": "SoundCloud",
+            "nicovideo": "니코니코동화"
+        },
         "gettingStart": "시작하기",
         "welcome": "{0}님 환영해요!",
         "add": "추가",
@@ -96,7 +101,8 @@
             "partyChat": "채팅",
             "partyQueue": "큐",
             "queueSearch": "큐 검색",
-            "skip": "스킵"
+            "skip": "스킵",
+            "andOthers": "{0} 외 {1}명"
         }
     },
     "message": {

@@ -15,6 +15,7 @@ declare module 'vue' {
     BMemberAvatarIcon: typeof import('./components/member/BMemberAvatarIcon.vue')['default']
     BPartyCard: typeof import('./components/party/BPartyCard.vue')['default']
     BPartyIcon: typeof import('./components/party/BPartyIcon.vue')['default']
+    BScrollText: typeof import('./components/global/text/BScrollText.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

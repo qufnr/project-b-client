@@ -1,15 +1,21 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import type { Guild } from '@/services/guild/types.ts'
 
 interface BPartyCardProps {
     party: Guild    //  TODO :: 파티 타입 선정
 }
 
+//  Vue I18n
+const { t } = useI18n()
+
+//  Props
 const { party } = defineProps<BPartyCardProps>()
 </script>
 
 <template>
     <v-card class="party-card"
+            color="background"
             min-height="360"
             elevation="0"
     >
@@ -32,16 +38,23 @@ const { party } = defineProps<BPartyCardProps>()
             <!-- 파티 설립자 -->
             <div class="party-card__owner">
                 <b-member-avatar-icon :member="party.owner" size="28" />
-                <p>{{ party.owner.name }}</p>
+                <p v-if="party.joinedMembers > 1">{{ t('text.party.andOthers', [party.owner.name, party.joinedMembers - 1]) }}</p>
+                <p v-else>{{ party.owner.name }}</p>
             </div>
 
             <v-spacer class="my-2" />
 
             <div class="party-card__etc">
-                <div v-if="party.">
-
+                <!-- 재생 중인 미디어 -->
+                <div class="d-flex align-center bg-surface py-1 px-2 rounded-xl">
+                    <v-icon size="16">music_note</v-icon>
+                    <b-scroll-text v-if="party.playStatus.isNowPlaying"
+                                   :value="party.playStatus.media.title"
+                    />
+                    <div v-else>
+                        <i class="text-darken">Not now playing</i>
+                    </div>
                 </div>
-                <p class="text-caption">members: {{ party.joinedMembers }}</p>
             </div>
         </v-card-text>
     </v-card>

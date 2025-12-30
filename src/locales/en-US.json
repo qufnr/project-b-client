@@ -18,6 +18,11 @@
             "minutes": "{0}minutes ago",
             "seconds": "few seconds ago"
         },
+        "mediaType": {
+            "youtube": "YouTube",
+            "soundcloud": "SoundCloud",
+            "nicovideo": "NicoNico Douga"
+        },
         "gettingStart": "Getting Start",
         "add": "Add",
         "welcome": "Welcome, {0}!",
@@ -96,7 +101,8 @@
             "partyChat": "Chatting",
             "partyQueue": "Queues",
             "queueSearch": "Queue Search",
-            "skip": "Skip"
+            "skip": "Skip",
+            "andOthers": "{0} and {1} others"
         }
     },
     "message": {
