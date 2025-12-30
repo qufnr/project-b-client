@@ -78,4 +78,6 @@ export const aliases: IconAliases = {
     celebration: 'celebration',
     accountCircle: 'account_circle',
     musicNote: 'music_note',
+    moreHoriz: 'more_horiz',
+    moreVert: 'more_vert',
 }

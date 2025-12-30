@@ -12,7 +12,7 @@ const partyNameInitial = computed(() => party.name[0]?.toUpperCase())
 </script>
 
 <template>
-    <v-avatar :color="party.colour" :image="party.icon ?? undefined" :size="size">
+    <v-avatar :color="party.colour" :image="party.icon ?? undefined" :size="size" class="select-none">
         <p>{{ partyNameInitial }}</p>
     </v-avatar>
 </template>

@@ -36,6 +36,7 @@ export default createVuetify({
             light: {
                 dark: false,
                 colors: {
+                    default: '#000',
                     primary: '#57a413',
                     secondary: '#3f8435',
                     surface: '#fff',
@@ -47,6 +48,7 @@ export default createVuetify({
             dark: {
                 dark: true,
                 colors: {
+                    default: '#fff',
                     primary: '#8be140',
                     secondary: '#50c440',
                     surface: '#282828',

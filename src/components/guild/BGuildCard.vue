@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { StringUtils } from '@/utils/string'
 import type { Guild } from '@/services/guild/types.ts'
 
 interface BGuildCardProps {
     guild: Guild
+}
+
+interface BGuildCardEmits {
+    click: [guild: Guild]
 }
 
 //  Vue I18n
@@ -11,33 +17,50 @@ const { t } = useI18n()
 
 //  Props
 const { guild } = defineProps<BGuildCardProps>()
+
+//  Emits
+const emits = defineEmits<BGuildCardEmits>()
+
+//  길드 소개
+const description = computed(() =>
+    !StringUtils.hasText(StringUtils.removeHtmlTags(guild.bio, true))
+        ? '&nbsp;'
+        : guild.bio
+)
 </script>
 
 <template>
-    <v-card class="party-card"
+    <v-card class="select-none"
             color="background"
             min-height="360"
             elevation="0"
+            v-ripple
+            @click.stop="emits('click', guild)"
     >
         <!-- 상단 파티 배너 이미지 -->
-        <v-img class="party-card__banner"
+        <v-img class="d-flex justify-space-between text-white"
                height="230"
                :src="guild.banner"
                color="darken-2"
                cover
         >
             <!-- 파티 아이콘, 이름 -->
-            <div class="party-card__banner__content">
-                <b-guild-icon :party="guild" />
-                <p class="fs-1 font-weight-bold">{{ guild.name }}</p>
+            <div class="d-flex align-center justify-space-between pt-2 px-3">
+                <div class="d-flex align-center ga-2">
+                    <b-guild-icon :party="guild" size="38" />
+                    <p class="fs-1 font-weight-bold">{{ guild.name }}</p>
+                </div>
+                <!-- 더보기 버튼 -->
+                <v-btn color="default" variant="text" icon="more_horiz"></v-btn>
             </div>
+
         </v-img>
         <v-spacer class="my-2" />
         <!-- 파티 설명 -->
-        <v-card-subtitle v-html="guild.bio"></v-card-subtitle>
+        <v-card-subtitle v-html="description"></v-card-subtitle>
         <v-card-text>
             <!-- 파티 설립자 -->
-            <div class="party-card__owner">
+            <div class="d-flex align-center ga-2">
                 <b-member-avatar-icon :member="guild.owner" size="28" />
                 <p v-if="guild.joinedMembers > 1">
                     {{

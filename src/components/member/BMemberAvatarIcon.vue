@@ -21,7 +21,7 @@ const nameInitial = computed<string>(() => {
 </script>
 
 <template>
-    <v-avatar :color="member.colour" :size="size">
+    <v-avatar :color="member.colour" :size="size" class="select-none">
         <v-img v-if="member.avatar != null"
                :src="member.avatar"
         />
