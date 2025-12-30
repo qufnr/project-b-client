@@ -12,9 +12,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BAppHeader: typeof import('./components/layout/BAppHeader.vue')['default']
+    BGuildCard: typeof import('./components/guild/BGuildCard.vue')['default']
+    BGuildIcon: typeof import('./components/guild/BGuildIcon.vue')['default']
     BMemberAvatarIcon: typeof import('./components/member/BMemberAvatarIcon.vue')['default']
-    BPartyCard: typeof import('./components/party/BPartyCard.vue')['default']
-    BPartyIcon: typeof import('./components/party/BPartyIcon.vue')['default']
     BScrollText: typeof import('./components/global/text/BScrollText.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

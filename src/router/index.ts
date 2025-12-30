@@ -28,8 +28,8 @@ import MainView from '@/views/MainView.vue'
 import SignView from '@/views/sign/SignView.vue'
 import SignUpView from '@/views/sign/SignUpView.vue'
 import MemberProfileView from '@/views/member/MemberPofileView.vue'
-import PartyMainView from '@/views/party/PartyMainView.vue'
-import PartyMyListView from '@/views/party/PartyMyListView.vue'
+import GuildListView from '@/views/guild/GuildListView.vue'
+import GuildMyListView from '@/views/guild/GuildMyListView.vue'
 
 const { t } = i18n.global
 
@@ -43,8 +43,8 @@ const router = createRouter({
             path: '',
             component: DefaultLayout,
             children: [
-                { path: '/party', name: 'party', component: PartyMainView },
-                { path: '/party/me', name: 'party.me', component: PartyMyListView },
+                { path: '/party', name: 'party', component: GuildListView },
+                { path: '/party/me', name: 'party.me', component: GuildMyListView },
                 { path: '/member/me', name: 'member.me', component: MemberProfileView },
             ]
         }
