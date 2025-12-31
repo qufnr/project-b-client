@@ -142,6 +142,7 @@
             "enterAccountAndEmail": "Enter your account ID and Email",
             "enterPassword": "Enter your account password",
             "registerNotice": "You can sign-in using your account ID or email address, and your email address is used to manage your account",
+            "notFound": "Profile not found!",
             "placeholder": {
                 "enterName": "Enter your account name"
             },

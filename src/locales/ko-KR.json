@@ -141,8 +141,9 @@
         "member": {
             "_comment": "### 사용자 관련 메시지 ###",
             "enterAccountAndEmail": "계정 아이디와 이메일을 입력해 주세요",
-            "registerNotice": "로그인을 할 때 계정 아이디 또는 이메일을 사용하여 로그인할 수 있고, 이메일은 계정을 관리하는 데 사용돼요",
             "enterPassword": "비밀번호를 입력해 주세요",
+            "registerNotice": "로그인을 할 때 계정 아이디 또는 이메일을 사용하여 로그인할 수 있고, 이메일은 계정을 관리하는 데 사용돼요",
+            "notFound": "존재하지 않는 프로필이에요",
             "placeholder": {
                 "enterName": "계정 이름을 입력해 주세요"
             },
