@@ -56,7 +56,7 @@ export const aliases: IconAliases = {
     file: '',
     plus: '',
     minus: '',
-    calendar: '',
+    calendar: 'calendar_today',
     treeviewCollapse: '',
     treeviewExpand: 'expand',
     eyeDropper: 'dropper_eye',
@@ -80,4 +80,5 @@ export const aliases: IconAliases = {
     musicNote: 'music_note',
     moreHoriz: 'more_horiz',
     moreVert: 'more_vert',
+    cake: 'cake',
 }
