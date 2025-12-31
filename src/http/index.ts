@@ -100,6 +100,7 @@ const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
             await router.push({ name: 'timeout' })
         }
         catch(routeError) {
+            //  TODO :: 나중에 try ... catch 빼기
             console.error('라우트 이동 실패', routeError)
         }
 
@@ -111,6 +112,9 @@ const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
 
     //  UNAUTHORIZED 일 경우 (접근 토큰 리프레시 처리)
     if(error.response.status === 401 && !originRequest._retry) {
+        if(!StringUtils.hasText(cookies.get(cookieNames.token.refresh)))
+            return await refreshTokenFailed(error)
+
         //  본문 재요청 무한루프 방지
         originRequest._retry = true
 
@@ -125,7 +129,7 @@ const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
                 })
             })
         }
-        refresh.pending = false
+        refresh.pending = true
 
         try {
             const memberStore = useMemberStore()
@@ -142,20 +146,7 @@ const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
             return instance(originRequest)
         }
         catch(error) {
-            console.error('토큰 재발급 실패', error)
-
-            const memberStore = useMemberStore()
-            memberStore.clear()
-            cookies.remove(cookieNames.token.sign)
-            cookies.remove(cookieNames.token.access)
-            cookies.remove(cookieNames.token.refresh)
-
-            await router.push({ name: 'sign' })
-
-            return Promise.reject({
-                error,
-                message: 'Token sessions is expired! Please try again sign-in.'
-            })
+            return await refreshTokenFailed(error)
         }
         finally {
             refresh.pending = false
@@ -166,6 +157,23 @@ const onResponseRejected = async (error: any): Promise<ClientErrorResponse> => {
     const message: string = StringUtils.hasText(response.message) ? response.message : error.message
 
     return Promise.reject({ error, message })
+}
+
+const refreshTokenFailed = async (error: any): Promise<any> => {
+    console.error('토큰 재발급 실패', error)
+
+    const memberStore = useMemberStore()
+    memberStore.clear()
+    cookies.remove(cookieNames.token.sign)
+    cookies.remove(cookieNames.token.access)
+    cookies.remove(cookieNames.token.refresh)
+
+    await router.push({ name: 'sign' })
+
+    return Promise.reject({
+        error,
+        message: 'Token sessions is expired! Please try again sign-in.'
+    })
 }
 
 instance.interceptors.request.use(onRequestFulfilled, onRequestRejected)

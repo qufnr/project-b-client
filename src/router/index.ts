@@ -36,17 +36,17 @@ const { t } = i18n.global
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        { path: '', name: 'main', component: MainView },
-        { path: '/sign', name: 'sign', component: SignView },
-        { path: '/sign-up', name: 'sign-up', component: SignUpView },
+        { path: '', name: 'main', component: MainView, meta: { authenticated: false } },
+        { path: '/sign', name: 'sign', component: SignView, meta: { authenticated: false } },
+        { path: '/sign-up', name: 'sign-up', component: SignUpView, meta: { authenticated: false } },
         {
             path: '',
             component: DefaultLayout,
             children: [
-                { path: '/party', name: 'party', component: GuildListView },
-                { path: '/party/me', name: 'party.me', component: GuildMyListView },
-                { path: '/member/me', name: 'member.me', component: MemberProfileView },
-                { path: '/member/:uid', name: 'member', component: MemberProfileView },
+                { path: '/party', name: 'party', component: GuildListView, meta: { authenticated: false } },
+                { path: '/party/me', name: 'party.me', component: GuildMyListView, meta: { authenticated: true } },
+                { path: '/member/me', name: 'member.me', component: MemberProfileView, meta: { authenticated: true } },
+                { path: '/member/:uid', name: 'member', component: MemberProfileView, meta: { authenticated: false } },
             ]
         }
     ],
@@ -61,7 +61,6 @@ router.beforeEach(async (to, from, next) => {
             const { member } = storeToRefs(memberStore)
 
             member.value = await MemberService.read()
-            next()
         }
         catch(error: any) {
             localStorage.setItem(storageNames.signOutReason, error.message)
