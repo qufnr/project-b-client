@@ -18,6 +18,9 @@ const nameInitial = computed<string>(() => {
         ? member.name.charAt(0).toUpperCase()
         : member.id.charAt(0).toUpperCase()
 })
+
+//  이름 이니셜 크기
+const nameInitialSize = computed(() => `${Number(size) / 2}px`)
 </script>
 
 <template>
@@ -25,7 +28,7 @@ const nameInitial = computed<string>(() => {
         <v-img v-if="member.avatar != null"
                :src="member.avatar"
         />
-        <p>{{ nameInitial }}</p>
+        <p :style="{ fontSize: nameInitialSize }">{{ nameInitial }}</p>
     </v-avatar>
 </template>
 
