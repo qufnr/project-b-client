@@ -3,6 +3,7 @@
 
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 import { useSnackbarStore } from '@/stores/snackbar'
@@ -11,6 +12,9 @@ import type { Member } from '@/services/member/types.ts'
 
 //  Vue Router
 const route = useRoute()
+
+//  Vue I18n
+const { t } = useI18n()
 
 //  Member Store
 const memberStore = useMemberStore()
@@ -22,40 +26,45 @@ const snackbarStore = useSnackbarStore()
 const profile = ref<Member>()   //  프로필 정보
 const loading = ref<boolean>(false) //  로딩 여부
 const tab = ref<string>('feed')
+const error = ref<string>()
 
 onMounted(async () => {
-    if(route.name === 'member.me')
-        profile.value = member.value
-    else {
-        const uid: number = Number(route.params.uid)
-
-        if(member.value.uid === uid) {
-            profile.value = member.value
-            return
+    try {
+        if(route.name === 'member.me') {
+            profile.value = await MemberService.read()
+            member.value = profile.value
         }
+        else {
+            const uid: number = Number(route.params.uid)
 
-        try {
+            if(Number.isNaN(uid)) {
+                error.value = t('message.member.notFound')
+                return
+            }
+
             loading.value = true
             profile.value = await MemberService.read(uid)
         }
-        catch(error: any) {
-            snackbarStore.show({ text: error.message })
-        }
-        finally {
-            loading.value = false
-        }
+    }
+    catch(error: any) {
+        snackbarStore.show({ text: error.message })
+    }
+    finally {
+        loading.value = false
     }
 })
 </script>
 
 <template>
+    <v-empty-state v-if="error" headline="Error! >:/" :title="error"></v-empty-state>
     <div v-if="profile" class="pa-0 bg-background" style="min-height: 100vh;">
         <v-img v-if="profile.banner"
                :src="profile.banner"
                height="212"
                cover
                class="bg-grey-lighten-3"
-        ></v-img>
+        >
+        </v-img>
 
         <v-container class="pt-6 pb-2">
             <div class="d-flex flex-column flex-md-row align-start align-md-center">

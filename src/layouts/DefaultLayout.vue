@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
-import { useDisplay } from 'vuetify'
 import BNavigationDrawer from '@/components/layout/BNavigationDrawer.vue'
 import routes from '@/router/routes/routes.json'
 import shortcutRoutes from '@/router/routes/shortcut-routes.json'
@@ -12,8 +11,6 @@ const appName = import.meta.env.VITE_APP_NAME
 
 //  Navigation Drawer Ref
 const drawer = useTemplateRef<NavigationDrawer>('drawer')
-
-const { lgAndDown } = useDisplay()
 
 /**
  * App Bar의 Nav Icon 클릭 이벤트
@@ -40,9 +37,7 @@ function onNavIconClick() {
         />
 
         <v-main class="bg-background transition-none" style="min-height: 100vh">
-            <v-container :fluid="lgAndDown">
-                <router-view />
-            </v-container>
+            <router-view />
         </v-main>
     </v-layout>
 </template>
