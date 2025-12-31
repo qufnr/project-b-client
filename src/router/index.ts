@@ -46,6 +46,7 @@ const router = createRouter({
                 { path: '/party', name: 'party', component: GuildListView },
                 { path: '/party/me', name: 'party.me', component: GuildMyListView },
                 { path: '/member/me', name: 'member.me', component: MemberProfileView },
+                { path: '/member/:uid', name: 'member', component: MemberProfileView },
             ]
         }
     ],
