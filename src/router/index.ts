@@ -27,7 +27,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import MainView from '@/views/MainView.vue'
 import SignView from '@/views/sign/SignView.vue'
 import SignUpView from '@/views/sign/SignUpView.vue'
-import MemberProfileView from '@/views/member/MemberPofileView.vue'
+import MemberProfileView from '@/views/member/MemberProfileView.vue'
 import GuildListView from '@/views/guild/GuildListView.vue'
 import GuildMyListView from '@/views/guild/GuildMyListView.vue'
 
