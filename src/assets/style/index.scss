@@ -14,9 +14,8 @@
     src: url('../font/PretendardJPVariable.woff2') format('woff2-variations');
 }
 
-p {
-    margin: 0 !important;
-}
+//  Vuetify 4.0.0 버그?? 때문에 추가
+p { margin: 0 !important; }
 
 :root,
 body,
