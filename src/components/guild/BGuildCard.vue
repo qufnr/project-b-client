@@ -61,7 +61,7 @@ const description = computed(() =>
         <v-card-text>
             <!-- 파티 설립자 -->
             <div class="d-flex align-center ga-2">
-                <b-member-avatar-icon :member="guild.owner" size="28" />
+                <b-member-icon :member="guild.owner" size="28" />
                 <p v-if="guild.joinedMembers > 1">
                     {{
                         t('text.party.andOthers', [guild.owner.name, guild.joinedMembers - 1])

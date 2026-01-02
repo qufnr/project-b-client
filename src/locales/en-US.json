@@ -2,11 +2,14 @@
     "text": {
         "lang": "English",
         "language": "Language",
+        "displayLanguage": "Display Language",
         "availableLangs": {
             "ko-KR": "한국어",
             "en-US": "English"
         },
-        "theme": {
+        "theme": "Appearance",
+        "availableThemes": {
+            "system": "System",
             "dark": "Dark",
             "light": "Light"
         },
@@ -48,9 +51,11 @@
         "signOut": "Sign out",
         "modifyMyself": "Modify your profile",
         "partyManagement": "Party Management",
+        "paymentManagement": "Paid and Subscribe Management",
         "queueHistory": "Queue History",
         "profile": "Profile",
         "visitDetails": "Visit Details",
+        "myData": "My Data",
         "createdAt": "Joined at {0}",
         "visible": "Visible",
         "invisible": "Invisible",

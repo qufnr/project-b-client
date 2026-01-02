@@ -57,7 +57,7 @@ onMounted(async () => {
 
 <template>
     <v-empty-state v-if="error" headline="Error! >:/" :title="error"></v-empty-state>
-    <div v-if="profile" class="pa-0 bg-background" style="min-height: 100vh;">
+    <v-container fluid v-if="profile" class="pa-0 bg-background" style="min-height: 100vh;">
         <v-img v-if="profile.banner"
                :src="profile.banner"
                height="212"
@@ -69,7 +69,7 @@ onMounted(async () => {
         <v-container class="pt-6 pb-2">
             <div class="d-flex flex-column flex-md-row align-start align-md-center">
 
-                <b-member-avatar-icon :member="member" size="160" class="mr-6" />
+                <b-member-icon :member="member" size="160" class="mr-6" />
 
                 <div class="mt-4 mt-md-0 flex-grow-1">
                     <h1 class="text-h4 font-weight-bold mb-1">
@@ -184,7 +184,7 @@ onMounted(async () => {
 <!--            </v-row>-->
 
 <!--        </v-container>-->
-    </div>
+    </v-container>
 </template>
 
 <style scoped>

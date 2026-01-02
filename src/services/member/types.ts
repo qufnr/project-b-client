@@ -23,6 +23,15 @@ export interface MemberPrivacy {
     isBirthdayPublic: boolean
 }
 
+//  사용자 아바타 메뉴 항목
+export interface MemberAvatarMenuItem {
+    icon: string
+    name: string
+    route?: string | null
+    hasEvent: boolean
+    subMenuIndex?: string | null
+}
+
 //  사용자 생성 요청
 export interface MemberCreateRequest {
     id: string

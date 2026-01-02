@@ -2,11 +2,14 @@
     "text": {
         "lang": "한국어",
         "language": "언어",
+        "displayLanguage": "표시 언어",
         "availableLangs": {
             "ko-KR": "한국어",
             "en-US": "English"
         },
-        "theme": {
+        "theme": "디자인",
+        "availableThemes": {
+            "system": "시스템",
             "dark": "어둡게",
             "light": "밝게"
         },
@@ -48,9 +51,11 @@
         "signOut": "로그아웃",
         "modifyMyself": "내 프로필 수정",
         "partyManagement": "파티 관리",
+        "paymentManagement": "결제 및 구독 관리",
         "queueHistory": "내 큐 목록",
         "profile": "프로필",
         "visitDetails": "상세보기",
+        "myData": "나의 데이터",
         "createdAt": "{0} 에 생성",
         "visible": "표시함",
         "invisible": "표시하지 않음",

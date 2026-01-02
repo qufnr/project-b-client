@@ -1,0 +1,57 @@
+[
+    [
+        {
+            "name": "text.profileDetails",
+            "icon": "account_circle",
+            "route": "member.me",
+            "hasEvent": false,
+            "subMenuIndex": null
+        },
+        {
+            "name": "text.signOut",
+            "icon": "logout",
+            "route": null,
+            "hasEvent": true,
+            "subMenuIndex": null
+        }
+    ],
+    [
+        {
+            "name": "text.partyManagement",
+            "icon": "celebration",
+            "route": "party.me",
+            "hasEvent": false,
+            "subMenuIndex": null
+        },
+        {
+            "name": "text.paymentManagement",
+            "icon": "paid",
+            "route": null,
+            "hasEvent": false,
+            "subMenuIndex": null
+        }
+    ],
+    [
+        {
+            "name": "text.myData",
+            "icon": "shield_person",
+            "route": null,
+            "hasEvent": false,
+            "subMenuIndex": null
+        },
+        {
+            "name": "text.theme",
+            "icon": "dark_mode",
+            "route": null,
+            "hasEvent": true,
+            "subMenuIndex": 1
+        },
+        {
+            "name": "text.displayLanguage",
+            "icon": "language",
+            "route": null,
+            "hasEvent": true,
+            "subMenuIndex": 2
+        }
+    ]
+]

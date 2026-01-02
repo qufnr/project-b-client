@@ -294,7 +294,7 @@ onUnmounted(() => {
                                     <p>{{ t('message.signSessionAvailable') }}</p>
                                     <v-chip rounded>
                                         <template #prepend>
-                                            <b-member-avatar-icon :member="member" class="mr-1" />
+                                            <b-member-icon :member="member" class="mr-1" />
                                         </template>
                                         <p>{{ member.name }}</p>
                                     </v-chip>

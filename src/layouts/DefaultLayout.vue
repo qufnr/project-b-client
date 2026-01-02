@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useMemberStore } from '@/stores/member'
 import BNavigationDrawer from '@/components/layout/BNavigationDrawer.vue'
-import routes from '@/router/routes/routes.json'
-import shortcutRoutes from '@/router/routes/shortcut-routes.json'
+import routes from '@/services/route/routes.json'
+import shortcutRoutes from '@/services/route/shortcut-routes.json'
 
+//  BNavigationDrawer Component Type
 type NavigationDrawer = InstanceType<typeof BNavigationDrawer>
 
 //  Application name
 const appName = import.meta.env.VITE_APP_NAME
+
+//  Member Store
+const memberStore = useMemberStore()
+const { member } = storeToRefs(memberStore)
 
 //  Navigation Drawer Ref
 const drawer = useTemplateRef<NavigationDrawer>('drawer')
@@ -25,23 +32,31 @@ function onNavIconClick() {
 
 <template>
     <v-layout>
-        <!-- 해더 내용과 네비게이션 드로어 -->
-        <v-app-bar color="background" class="mx-2">
-            <v-app-bar-nav-icon @click="onNavIconClick"></v-app-bar-nav-icon>
+        <!-- 헤더 -->
+        <v-app-bar color="transparent" class="app-bar__bg-blur pl-2 pr-4">
+            <template #prepend>
+                <v-app-bar-nav-icon @click="onNavIconClick"></v-app-bar-nav-icon>
+            </template>
             <v-app-bar-title>{{ appName }}</v-app-bar-title>
+            <b-app-bar-member-profile :member="member" :member-name="memberStore.memberName" />
         </v-app-bar>
 
+        <!-- 네비게이션 드로어 -->
         <b-navigation-drawer ref="drawer"
                              :items="routes"
                              :shortcut-items="shortcutRoutes"
         />
 
+        <!-- 본문 -->
         <v-main class="bg-background transition-none" style="min-height: 100vh">
             <router-view />
         </v-main>
     </v-layout>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.app-bar__bg-blur {
+    backdrop-filter: blur(64px);
+    -webkit-backdrop-filter: blur(64px);
+}
 </style>

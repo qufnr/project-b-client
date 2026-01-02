@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDisplay, useTheme } from 'vuetify'
 import { useI18n } from 'vue-i18n'
-import type { RouteItem } from '@/router/routes/types.ts'
+import type { RouteItem } from '@/services/route/types.ts'
 
 interface BNavigationDrawerProps {
     shortcutItems?: RouteItem[]
