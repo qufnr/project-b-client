@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useLocaleStore } from '@/stores/locale'
@@ -13,6 +14,9 @@ interface BAppBarMemberProfileProps {
     member?: Member | null
     memberName?: string | null
 }
+
+//  Vue Router
+const route = useRoute()
 
 //  Vue I18n
 const { t } = useI18n()
@@ -53,6 +57,11 @@ watch([locale, theme], () => {
 }, {
     deep: true,
     immediate: true
+})
+
+//  라우트 페스가 바뀌면 메뉴 끄기
+watch(() => route.fullPath, () => {
+    menu.value = false
 })
 
 /**
