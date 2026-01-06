@@ -10,9 +10,9 @@
         },
         "theme": "디자인",
         "availableThemes": {
-            "system": "시스템",
-            "dark": "어둡게",
-            "light": "밝게"
+            "system": "기기 테마 사용",
+            "dark": "어두운 테마",
+            "light": "밝은 테마"
         },
         "timeAgo": {
             "years": "{0}년 전",
@@ -120,7 +120,8 @@
         "notAuthenticated": "귀하를 인증하는 데 실패했어요. 다시 로그인해 주세요",
         "updated": "업데이트 되었어요",
         "updateFailed": "업데이트하는 데 실패했어요",
-        "themeApplyOnlyThisBrowser": "테마 설정은 해당 브라우저에서만 적용돼요",
+        "themeApplyThisBrowser": "테마 설정은 해당 브라우저에서만 적용돼요",
+        "localeApplyThisBrowser": "이 브라우저의 버튼 및 텍스트 표시",
         "signWelcomeBackLine1": "다시 돌아오신 것을 환영해요, {0}님!",
         "signWelcomeBackLine2": "본인임을 증명하기 위해 비밀번호를 입력해 주세요",
         "signExpired": "로그인 세션이 만료되었어요, 다시 로그인해 주세요",

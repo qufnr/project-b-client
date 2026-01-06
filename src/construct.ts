@@ -9,6 +9,8 @@ export const cookieNames = {
 export const storageNames = {
     signMemberAlias: 'bserver.memberAlias',
     signOutReason: 'bserver.forceSignOutReason',
+    language: 'bserver.lang',
+    theme: 'bserver.theme',
 }
 
 export const allowedHeaders = {

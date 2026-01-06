@@ -11,11 +11,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BAppBarMemberProfile: typeof import('./components/layout/BAppBarMemberProfile.vue')['default']
+    BAppBarMemberIcon: typeof import('./components/layout/BAppBarMemberIcon.vue')['default']
     BGuildCard: typeof import('./components/guild/BGuildCard.vue')['default']
     BGuildIcon: typeof import('./components/guild/BGuildIcon.vue')['default']
     BMemberIcon: typeof import('./components/member/BMemberIcon.vue')['default']
     BNavigationDrawer: typeof import('./components/layout/BNavigationDrawer.vue')['default']
+    BrowserSettingProvider: typeof import('./components/provider/BrowserSettingProvider.vue')['default']
     BScrollText: typeof import('./components/global/text/BScrollText.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

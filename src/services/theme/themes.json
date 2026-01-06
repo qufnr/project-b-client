@@ -1,0 +1,17 @@
+[
+    {
+        "name": "text.availableThemes.light",
+        "value": "light",
+        "icon": "light_mode"
+    },
+    {
+        "name": "text.availableThemes.dark",
+        "value": "dark",
+        "icon": "dark_mode"
+    },
+    {
+        "name": "text.availableThemes.system",
+        "value": "system",
+        "icon": ""
+    }
+]
