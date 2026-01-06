@@ -5,7 +5,8 @@
         "displayLanguage": "표시 언어",
         "availableLangs": {
             "ko-KR": "한국어",
-            "en-US": "English"
+            "en-US": "English",
+            "ja-JP": "日本語"
         },
         "theme": "디자인",
         "availableThemes": {

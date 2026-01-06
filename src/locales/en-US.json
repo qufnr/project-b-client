@@ -5,7 +5,8 @@
         "displayLanguage": "Display Language",
         "availableLangs": {
             "ko-KR": "한국어",
-            "en-US": "English"
+            "en-US": "English",
+            "ja-JP": "日本語"
         },
         "theme": "Appearance",
         "availableThemes": {
@@ -79,7 +80,7 @@
         "route": {
             "home": "Home",
             "my": "My page",
-            "myParties": "My parties"
+            "myParties": "My party"
         },
         "member": {
             "_comment": "### 사용자 관련 텍스트 ###",
@@ -101,7 +102,7 @@
             "partyVisibility": "Visibility",
             "partyPublicPrivate": "Public",
             "partyPassword": "Party Password",
-            "myParties": "My Parties",
+            "myParties": "My Party",
             "partyMember": "Party Members",
             "partyChat": "Chatting",
             "partyQueue": "Queues",
