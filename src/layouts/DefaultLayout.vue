@@ -38,7 +38,7 @@ function onNavIconClick() {
                 <v-app-bar-nav-icon @click="onNavIconClick"></v-app-bar-nav-icon>
             </template>
             <v-app-bar-title>{{ appName }}</v-app-bar-title>
-            <b-app-bar-member-icon :member="member" :member-name="memberStore.memberName" />
+            <b-app-bar-member-button-group :member="member" :member-name="memberStore.memberName" />
         </v-app-bar>
 
         <!-- 네비게이션 드로어 -->
