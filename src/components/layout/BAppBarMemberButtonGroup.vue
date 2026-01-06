@@ -123,7 +123,7 @@ onMounted(() => {
                         <p>{{ memberName }}</p>
                         <p>{{ `@${member.id}` }}</p>
                         <v-spacer class="my-1" />
-                        <router-link :to="{ name: 'member.me' }" class="text-decoration-none text-secondary fs-n1">{{ t('text.modifyMyself') }}</router-link>
+                        <router-link :to="{ name: 'member.modify' }" class="text-decoration-none text-secondary fs-n1">{{ t('text.modifyMyself') }}</router-link>
                     </div>
                 </div>
                 <v-divider class="my-2" />

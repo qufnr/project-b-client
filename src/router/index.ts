@@ -28,6 +28,7 @@ import MainView from '@/views/MainView.vue'
 import SignView from '@/views/sign/SignView.vue'
 import SignUpView from '@/views/sign/SignUpView.vue'
 import MemberProfileView from '@/views/member/MemberProfileView.vue'
+import MemberModifyView from '@/views/member/MemberModifyView.vue'
 import GuildListView from '@/views/guild/GuildListView.vue'
 import GuildMyListView from '@/views/guild/GuildMyListView.vue'
 
@@ -46,6 +47,7 @@ const router = createRouter({
                 { path: '/party', name: 'party', component: GuildListView, meta: { authenticated: false } },
                 { path: '/party/me', name: 'party.me', component: GuildMyListView, meta: { authenticated: true } },
                 { path: '/member/me', name: 'member.me', component: MemberProfileView, meta: { authenticated: true } },
+                { path: '/member/modify', name: 'member.modify', component: MemberModifyView, meta: { authenticated: true } },
                 { path: '/member/:uid', name: 'member', component: MemberProfileView, meta: { authenticated: false } },
             ]
         }
