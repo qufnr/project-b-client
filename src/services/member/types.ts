@@ -27,8 +27,9 @@ export interface MemberPrivacy {
 export interface MemberAvatarMenuItem {
     icon: string
     name: string
-    route?: string | null
     hasEvent: boolean
+    disabled: boolean
+    route?: string | null
     subMenuIndex?: string | null
 }
 
