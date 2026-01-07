@@ -34,10 +34,10 @@ function onNavIconClick() {
     <v-layout>
         <!-- 헤더 -->
         <v-app-bar color="transparent" class="app-bar__bg-blur pl-2 pr-4">
-            <template #prepend>
-                <v-app-bar-nav-icon @click="onNavIconClick"></v-app-bar-nav-icon>
-            </template>
-            <v-app-bar-title>{{ appName }}</v-app-bar-title>
+            <v-app-bar-nav-icon @click="onNavIconClick"></v-app-bar-nav-icon>
+            <v-app-bar-title>
+                <template #text>{{ appName }}</template>
+            </v-app-bar-title>
             <b-app-bar-member-button-group :member="member" :member-name="memberStore.memberName" />
         </v-app-bar>
 

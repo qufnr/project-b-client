@@ -14,6 +14,9 @@ import 'material-symbols/index.scss'
 import '@/assets/style/material-symbols/index.scss'
 import { materialSymbols, aliases as materialAliases } from '@/plugins/material-symbols.ts'
 
+//  Vuetify Lab Components
+import { VDateInput } from 'vuetify/labs/components'
+
 // Composables
 import { createVuetify } from 'vuetify'
 
@@ -23,6 +26,10 @@ import { md3 } from 'vuetify/blueprints'
 export default createVuetify({
     //  블루프린트
     blueprint: md3,
+    //  컴포넌트
+    components: {
+        VDateInput,
+    },
     //  아이콘세트
     icons: {
         defaultSet: 'materialSymbols',
