@@ -18,6 +18,7 @@ declare module 'vue' {
     BGuildIcon: typeof import('./components/guild/BGuildIcon.vue')['default']
     BMemberIcon: typeof import('./components/member/BMemberIcon.vue')['default']
     BMemberModifyForm: typeof import('./components/member/BMemberModifyForm.vue')['default']
+    BMemberPrivacyModifyForm: typeof import('./components/member/BMemberPrivacyModifyForm.vue')['default']
     BNavigationDrawer: typeof import('./components/layout/BNavigationDrawer.vue')['default']
     BrowserSettingProvider: typeof import('./components/provider/BrowserSettingProvider.vue')['default']
     BScrollText: typeof import('./components/global/text/BScrollText.vue')['default']

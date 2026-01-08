@@ -4,8 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useMemberStore } from '@/stores/member'
 import BMemberModifyForm from '@/components/member/BMemberModifyForm.vue'
+import BMemberPrivacyModifyForm from '@/components/member/BMemberPrivacyModifyForm.vue'
 
 type MemberModifyForm = InstanceType<typeof BMemberModifyForm>
+type MemberPrivacyModifyForm = InstanceType<typeof BMemberPrivacyModifyForm>
 
 //  Vue I18n
 const { t } = useI18n()
@@ -16,6 +18,7 @@ const { member } = storeToRefs(memberStore)
 
 //  폼 Ref
 const memberModifyForm = ref<MemberModifyForm>()
+const memberPrivacyModifyForm = ref<MemberPrivacyModifyForm>()
 
 const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버시)
 
@@ -36,7 +39,9 @@ const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버
                 />
             </v-tabs-window-item>
             <v-tabs-window-item :value="1">
-                <p>Hello world</p>
+                <b-member-privacy-modify-form ref="memberPrivacyModifyForm"
+                                              :member="member"
+                />
             </v-tabs-window-item>
         </v-tabs-window>
     </v-container>

@@ -70,10 +70,16 @@ export default createVuetify({
     defaults: {
         VTextField: {
             color: "primary",
+            hideDetails: "auto",
         },
         VBtn: {
             color: "primary",
             variant: "flat",
+        },
+        VSwitch: {
+            color: "primary",
+            hideDetails: "auto",
+            flat: true
         },
         VCard: {
             elevation: 2,

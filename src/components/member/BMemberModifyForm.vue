@@ -93,7 +93,7 @@ function onResetClick() {
     }
 
     if(ObjectUtils.hasDifference(member, target)) {
-        alertStore.show(t('text.reset'), '변경된 내용이 있어요. 그래도 초기화할까요?', {
+        alertStore.show(t('text.reset'), t('message.reset'), {
             showCancel: true,
             confirmText: t('text.reset'),
             onConfirm: () => {

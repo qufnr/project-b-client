@@ -129,6 +129,7 @@
         "signWelcomeBackLine2": "Please enter your password to verify your identity",
         "signExpired": "Signing session is expired! Please sign in again",
         "signSessionAvailable": "There is already an account logged in.",
+        "reset": "Something has changed. Should I reset it anyway?",
         "validation": {
             "_comment": "### 전역 Validation 메시지 (영어 작업 필요) ###",
             "required": "This field is mandatory",
