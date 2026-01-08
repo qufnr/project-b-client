@@ -43,7 +43,7 @@ const isDeepEquals = (x: any, y: any): boolean => {
  * @param source 원본 데이터 ex) { name: 'aris', age: 15, height: 149 }
  * @param target 변경 데이터 ex) { name: 'tendou', height: 150 }
  */
-const hasDifference = (source: object, target: object) => {
+const hasDifference = (source: any, target: any) => {
     const keys = Object.keys(target)
     for(const key of keys) {
         if(!isDeepEquals(source[key], target[key]))
