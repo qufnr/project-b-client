@@ -27,6 +27,11 @@
             "soundcloud": "SoundCloud",
             "nicovideo": "니코니코동화"
         },
+        "publicState": {
+            "public": "공개",
+            "followOnly": "팔로워만",
+            "private": "비공개"
+        },
         "gettingStart": "시작하기",
         "welcome": "{0}님 환영해요!",
         "add": "추가",
@@ -93,7 +98,10 @@
             "memberEmail": "이메일",
             "memberAvatar": "아바타",
             "memberBio": "소개",
-            "memberBirthday": "생일"
+            "memberBirthday": "생일",
+            "profilePublic": "프로필 공개",
+            "birthdayPublic": "생일 공개",
+            "playlistPublic": "재생목록 공개"
         },
         "party": {
             "_comment": "### 파티 관련 텍스트 ###",
@@ -165,7 +173,9 @@
                 "email": "이메일은 변경할 수 없어요. 만약 분실한 이메일인 경우 관리자에게 문의해 주세요",
                 "bio": "귀하에 대해 간략하게 설명하고 다른 사용자들에게 알리세요",
                 "birthday": "생일은 한 번만 설정할 수 있어요",
-                "firstCreateAccount": "마지막으로 귀하가 계정을 만들었다는 것을 확인하기 위해 {0} 이메일로 인증번호를 전송했어요. 이메일을 확인 후 아래 입력란에 기입해 주세요. 만약 인증번호 메일을 받지 못했다면 아래 '인증 재전송' 버튼을 눌러주세요"
+                "firstCreateAccount": "마지막으로 귀하가 계정을 만들었다는 것을 확인하기 위해 {0} 이메일로 인증번호를 전송했어요. 이메일을 확인 후 아래 입력란에 기입해 주세요. 만약 인증번호 메일을 받지 못했다면 아래 '인증 재전송' 버튼을 눌러주세요",
+                "privacyProfile": "비공개로 설정하면 귀하만 프로필을 볼 수 있어요",
+                "privacyBirthday": "비공개로 설정하면 다른 사용자는 귀하의 생일을 프로필에서 볼 수 없어요"
             }
         },
         "party": {

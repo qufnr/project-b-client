@@ -69,20 +69,23 @@ export default createVuetify({
     //  컴포넌트 기본값 설정
     defaults: {
         VTextField: {
-            color: "primary",
-            hideDetails: "auto",
+            color: 'primary',
+            hideDetails: 'auto',
         },
         VBtn: {
-            color: "primary",
-            variant: "flat",
+            color: 'primary',
+            variant: 'flat',
         },
         VSwitch: {
-            color: "primary",
-            hideDetails: "auto",
+            color: 'primary',
+            hideDetails: 'auto',
             flat: true
         },
         VCard: {
             elevation: 2,
+        },
+        VRadioGroup: {
+            color: 'primary',
         }
     }
 })
