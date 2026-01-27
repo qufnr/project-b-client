@@ -39,11 +39,10 @@ const publicStates = computed(() => ([
 </script>
 
 <template>
-<!--    TODO :: 캡션 문구 바꾸기 -->
     <v-form ref="privacyModifyForm" class="d-flex flex-column ga-3 mx-4" style="max-width: 660px">
         <div class="d-flex flex-column ga-1">
             <p class="font-weight-bold">{{ t('text.member.profilePublic') }}</p>
-<!--            <p class="text-caption">{{ t('message.member.caption.privacyProfile') }}</p>-->
+            <p class="text-caption">{{ t('message.member.caption.privacyProfile') }}</p>
             <v-radio-group v-model="form.profile" density="comfortable" inline>
                 <v-radio v-for="(publicState, i) in publicStates" :key="i" :label="publicState.label" :value="publicState.value" class="mr-2" />
             </v-radio-group>
@@ -51,7 +50,7 @@ const publicStates = computed(() => ([
 
         <div class="d-flex flex-column ga-1">
             <p class="font-weight-bold">{{ t('text.member.birthdayPublic') }}</p>
-<!--            <p class="text-caption">{{ t('message.member.caption.privacyBirthday') }}</p>-->
+            <p class="text-caption">{{ t('message.member.caption.privacyBirthday') }}</p>
             <v-radio-group v-model="form.birthday" density="comfortable" inline>
                 <v-radio v-for="(publicState, i) in publicStates" :key="i" :label="publicState.label" :value="publicState.value" class="mr-2" />
             </v-radio-group>
@@ -59,7 +58,7 @@ const publicStates = computed(() => ([
 
         <div class="d-flex flex-column ga-1">
             <p class="font-weight-bold">{{ t('text.member.playlistPublic') }}</p>
-<!--            <p class="text-caption">{{ t('message.member.caption.privacyPlaylist') }}</p>-->
+            <p class="text-caption">{{ t('message.member.caption.privacyPlaylist') }}</p>
             <v-radio-group v-model="form.playlist" density="comfortable" inline>
                 <v-radio v-for="(publicState, i) in publicStates" :key="i" :label="publicState.label" :value="publicState.value" class="mr-2" />
             </v-radio-group>

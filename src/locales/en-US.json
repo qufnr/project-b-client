@@ -152,8 +152,9 @@
             "bio": "Briefly introduce yourself and let others know about you.",
             "birthday": "Your birthday can only be set once.",
             "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button.",
-            "privacyPublic": "If you set it to private, only you can see your profile.",
-            "privacyBirthday": "If you set it to private, other users will not be able to see your birthday on your profile."
+            "privacyPublic": "Set whether your profile can be viewed by other members.",
+            "privacyBirthday": "Set whether other members can see your birthday.",
+            "privacyPlaylist": "Set whether other members can see your playlist."
         },
         "placeholder": {
             "date": "MM/DD/YYYY"
