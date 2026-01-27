@@ -97,24 +97,24 @@ function onResetClick() {
             showCancel: true,
             confirmText: t('text.reset'),
             onConfirm: () => {
-                form.name.value = member.name
+                form.name.value = member.name ?? ''
                 form.email.value = member.email
-                form.avatar.value = member.avatar
-                form.birthday.value = member.birthday
+                form.avatar.value = member.avatar ?? ''
+                form.birthday.value = member.birthday ?? ''
             }
         })
     }
 }
 
 onMounted(() => {
-    form.avatar.value = member.avatar
-    form.name.value = member.name
+    form.avatar.value = member.avatar ?? ''
+    form.name.value = member.name ?? ''
     form.email.value = member.email
-    form.birthday.value = member.birthday
+    form.birthday.value = member.birthday ?? ''
 })
 
 defineExpose({
-    formData: () => ObjectUtils.deepClone(member.value)
+    formData: () => ObjectUtils.deepClone(member)
 })
 </script>
 
