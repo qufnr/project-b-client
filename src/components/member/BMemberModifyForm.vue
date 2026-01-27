@@ -40,8 +40,13 @@ const alertStore = useAlertStore()
 //  Props
 const { member } = defineProps<BMemberModifyFormProps>()
 
-//  폼 Ref
-const modifyForm = ref<VForm>()
+//  요소 참조 변수들
+const modifyForm = ref<VForm>() //  입력 폼
+const avatarFileInput = ref<HTMLInputElement>() //  아바타 파일 인풋
+
+//  상태 변수들
+const cropper = ref<boolean>(false) //  이미지 크로퍼 표시 여부
+const templateAvatar = ref<Blob | null>(null)   //  업로드 아바타 파일
 
 //  Form States
 const form = reactive<BMemberModifyFormStates>({
@@ -67,6 +72,20 @@ const form = reactive<BMemberModifyFormStates>({
         rules: []
     }
 })
+
+/**
+ * 아바타 파일 업로드 변경 이벤트
+ *
+ * @param event 인풋 이벤트
+ */
+function onTemplateAvatarChange(event: InputEvent) {
+    if(event.target.files instanceof FileList && event.target.files[0] instanceof File)
+        templateAvatar.value = event.target.files[0]
+    else
+        alertStore.show(t('text.member.avatarUploadFailed'), t('message.member.validation.invalidAvatarFile'), {
+            confirmText: t('text.done')
+        })
+}
 
 /**
  * 수정 클릭
@@ -132,10 +151,11 @@ defineExpose({
                     <b-member-icon :member="member" :src="form.avatar.value" size="132" />
                 </v-card>
                 <div class="d-flex ga-2">
-                    <v-btn>{{ t('text.change')}}</v-btn>
+                    <v-btn @click="avatarFileInput.click()">{{ t('text.change')}}</v-btn>
                     <v-btn variant="outlined" color="secondary">{{ t('text.remove') }}</v-btn>
                 </div>
             </div>
+            <input type="file" ref="avatarFileInput" @change="onTemplateAvatarChange" class="d-none" />
         </div>
 
         <!-- Name (Alias) -->

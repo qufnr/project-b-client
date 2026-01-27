@@ -50,6 +50,7 @@
         "modify": "Modify",
         "reset": "Reset",
         "more": "More",
+        "crop": "Crop",
         "appearance": "Appearance",
         "appSettings": "Settings",
         "create": "CREATE",
@@ -101,7 +102,10 @@
             "memberBirthday": "Birthday",
             "profilePublic": "Profile Public",
             "birthdayPublic": "Birthday Public",
-            "playlistPublic": "Playlist Public"
+            "playlistPublic": "Playlist Public",
+            "avatarCrop": "Crop Avatar",
+            "avatarUpload": "Avatar Upload",
+            "avatarUploadFailed": "Avatar Upload Failed"
         },
         "party": {
             "_comment": "### 파티 관련 텍스트 ###",
@@ -176,6 +180,9 @@
                 "bio": "Briefly introduce yourself and let others know about you.",
                 "birthday": "Your birthday can only be set once.",
                 "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button."
+            },
+            "validation": {
+                "invalidAvatarFile": "Invalid avatar file format."
             }
         },
         "party": {

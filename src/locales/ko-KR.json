@@ -50,6 +50,7 @@
         "modify": "수정",
         "reset": "초기화",
         "more": "더보기",
+        "crop": "자르기",
         "appearance": "테마",
         "appSettings": "설정",
         "create": "만들기",
@@ -101,7 +102,10 @@
             "memberBirthday": "생일",
             "profilePublic": "프로필 공개",
             "birthdayPublic": "생일 공개",
-            "playlistPublic": "재생목록 공개"
+            "playlistPublic": "재생목록 공개",
+            "avatarCrop": "아바타 자르기",
+            "avatarUpload": "아바타 업로드",
+            "avatarUploadFailed": "아바타 업로드 실패"
         },
         "party": {
             "_comment": "### 파티 관련 텍스트 ###",
@@ -177,6 +181,9 @@
                 "privacyProfile": "프로필을 다른 사용자도 볼 수 있는지 설정해요",
                 "privacyBirthday": "본인의 생일을 다른 사용자도 볼 수 있는지 설정해요",
                 "privacyPlaylist": "본인의 플레이리스트를 다른 사용자도 볼 수 있는지 설정해요"
+            },
+            "validation": {
+                "invalidAvatarFile": "아바타 파일이 이상해요"
             }
         },
         "party": {
