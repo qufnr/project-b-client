@@ -14,6 +14,7 @@ declare module 'vue' {
     AlertProvider: typeof import('./components/provider/AlertProvider.vue')['default']
     BAlert: typeof import('./components/global/overlay/BAlert.vue')['default']
     BAppBarMemberButtonGroup: typeof import('./components/layout/BAppBarMemberButtonGroup.vue')['default']
+    BCropper: typeof import('./components/global/overlay/BCropper.vue')['default']
     BGuildCard: typeof import('./components/guild/BGuildCard.vue')['default']
     BGuildIcon: typeof import('./components/guild/BGuildIcon.vue')['default']
     BMemberIcon: typeof import('./components/member/BMemberIcon.vue')['default']

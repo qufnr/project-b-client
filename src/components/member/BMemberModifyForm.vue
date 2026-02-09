@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAlertStore } from '@/stores/alert'
 import { ObjectUtils } from '@/utils/object'
@@ -45,8 +45,7 @@ const modifyForm = ref<VForm>() //  입력 폼
 const avatarFileInput = ref<HTMLInputElement>() //  아바타 파일 인풋
 
 //  상태 변수들
-const cropper = ref<boolean>(false) //  이미지 크로퍼 표시 여부
-const templateAvatar = ref<Blob | null>(null)   //  업로드 아바타 파일
+const templateAvatar = ref<string | null>(null) //  업로드 아바타 파일
 
 //  Form States
 const form = reactive<BMemberModifyFormStates>({
@@ -74,17 +73,33 @@ const form = reactive<BMemberModifyFormStates>({
 })
 
 /**
+ * 아바타 변경 버튼 클릭
+ */
+function onAvatarChangeClick() {
+    if(avatarFileInput.value)
+        avatarFileInput.value.click()
+}
+
+/**
  * 아바타 파일 업로드 변경 이벤트
  *
- * @param event 인풋 이벤트
+ * @param event 이벤트
  */
-function onTemplateAvatarChange(event: InputEvent) {
-    if(event.target.files instanceof FileList && event.target.files[0] instanceof File)
-        templateAvatar.value = event.target.files[0]
+function onTemplateAvatarChange(event: Event) {
+    const target = event.target as HTMLInputElement
+
+    if(target.files instanceof FileList && target.files[0] instanceof File) {
+        if(templateAvatar.value)
+            URL.revokeObjectURL(templateAvatar.value)
+
+        templateAvatar.value = URL.createObjectURL(target.files[0])
+    }
     else
         alertStore.show(t('text.member.avatarUploadFailed'), t('message.member.validation.invalidAvatarFile'), {
             confirmText: t('text.done')
         })
+
+    target.value = ''
 }
 
 /**
@@ -132,12 +147,22 @@ onMounted(() => {
     form.birthday.value = member.birthday ?? ''
 })
 
+onUnmounted(() => {
+    if(templateAvatar.value)
+        URL.revokeObjectURL(templateAvatar.value)
+})
+
 defineExpose({
     formData: () => ObjectUtils.deepClone(member)
 })
 </script>
 
 <template>
+    <b-cropper v-model="templateAvatar"
+               :title="t('text.member.avatarCrop')"
+               :close-text="t('text.cancel')"
+               :done-text="t('text.crop')"
+    />
     <v-form ref="modifyForm" class="d-flex flex-column ga-3" style="max-width: 660px">
         <!-- Avatar -->
         <div class="d-flex flex-column ga-1">
@@ -151,7 +176,7 @@ defineExpose({
                     <b-member-icon :member="member" :src="form.avatar.value" size="132" />
                 </v-card>
                 <div class="d-flex ga-2">
-                    <v-btn @click="avatarFileInput.click()">{{ t('text.change')}}</v-btn>
+                    <v-btn @click="onAvatarChangeClick">{{ t('text.change')}}</v-btn>
                     <v-btn variant="outlined" color="secondary">{{ t('text.remove') }}</v-btn>
                 </div>
             </div>

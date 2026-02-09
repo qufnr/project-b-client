@@ -86,6 +86,10 @@ export default createVuetify({
         },
         VRadioGroup: {
             color: 'primary',
+        },
+        VDialog: {
+            noClickAnimation: true,
+            // persistent: true,
         }
     }
 })

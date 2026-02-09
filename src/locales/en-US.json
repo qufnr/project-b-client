@@ -132,6 +132,7 @@
         "subtitle": "Listen, watch, write together, and gather in one space to create a community!",
         "error": "Oops! An error occurred",
         "networkError": "Server connection failed",
+        "fileError": "File invalid",
         "notAuthenticated": "Failed to authenticate you. Please sign in again",
         "updated": "Successfully updated",
         "updateFailed": "Failed to update",
