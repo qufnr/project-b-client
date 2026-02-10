@@ -128,6 +128,7 @@
     },
     "message": {
         "_comment": "### 전역 메시지 ###",
+        "loading": "Loading...",
         "title": "",
         "subtitle": "Listen, watch, write together, and gather in one space to create a community!",
         "error": "Oops! An error occurred",
