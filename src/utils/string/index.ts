@@ -17,6 +17,31 @@ const removeHtmlTags = (value: string, trim: boolean = false) => {
     return trim ? text.trim() : text
 }
 
+/**
+ * Textarea 문자열을 HTML 문자열로 변환합니다.
+ *
+ * @param value Textarea 문자열 값
+ * @return 줄바꿈을 문단으로 처리한 문자열
+ */
+const textareaToHtml = (value: any): string => {
+    if(!hasText(value))
+        return '<p></p>'
+
+    const correctTypeValue = value as string
+
+    const lines = correctTypeValue.split('\n')
+    return lines.map(line => `<p>${line}</p>`).join('')
+}
+
+/**
+ * HTML 문자열을 Textarea 문자열로 변환합니다.
+ *
+ * @param value HTML 문자열 값
+ * @return 문단을 줄바꿈으로 처리한 문자열
+ */
+const htmlToTextarea = (value: any): string =>
+    hasText(value) ? value.replace(/<p>|<\/p>/g, '\n') : ''
+
 export const StringUtils = {
-    hasText, removeHtmlTags,
+    hasText, removeHtmlTags, textareaToHtml, htmlToTextarea
 }
