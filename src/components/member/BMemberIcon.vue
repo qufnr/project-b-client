@@ -28,7 +28,7 @@ const nameInitialSize = computed(() => `${Number(size) / 2}px`)
     <v-avatar :color="member.colour" :size="size" class="select-none">
         <v-img v-if="member.avatar != null" :src="member.avatar" />
         <v-img v-else-if="!!src" :src="src" />
-        <p :style="{ fontSize: nameInitialSize }">{{ nameInitial }}</p>
+        <p v-else :style="{ fontSize: nameInitialSize }">{{ nameInitial }}</p>
     </v-avatar>
 </template>
 
