@@ -4,6 +4,7 @@ import type {
     MemberCanUseRequest,
     MemberCanUseResponse,
     MemberCreateRequest,
+    MemberResourceRequest,
     MemberUpdateRequest
 } from '@/services/member/types.ts'
 
@@ -42,5 +43,25 @@ export const MemberService = {
      * @return 사용 가능 여부
      */
     canUse: async (params: MemberCanUseRequest): Promise<MemberCanUseResponse> =>
-        (await http.get<MemberCanUseResponse>(`${endpoint}/can-use`, { params })).data
+        (await http.get<MemberCanUseResponse>(`${endpoint}/can-use`, { params })).data,
+
+    /**
+     * 사용자 리소스(아바타, 배너) 업로드
+     *
+     * @param params 요청 정보
+     * @param source 파일
+     */
+    resource: async (params: MemberResourceRequest, source: File | Blob | null = null): Promise<void> => {
+        if(!params.isDelete && !source)
+            throw new Error('Invalid file data.')
+
+        const request = new Blob([JSON.stringify(params)], { type: 'application/json' })
+
+        const formData = new FormData()
+        formData.append('request', request)
+        if(source)
+            formData.append('file', source, `member-avatar-template.${import.meta.env.VITE_UPLOAD_IMAGE_EXTENSION_SHORT}`)
+
+        await http.put(`${endpoint}/resource`, formData)
+    }
 }
