@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { useMemberStore } from '@/stores/member'
+import { useSnackbarStore } from '@/stores/snackbar'
+import { useLoadingStore } from '@/stores/loading'
+import { MemberService } from '@/services/member'
 import BMemberModifyForm from '@/components/member/BMemberModifyForm.vue'
 import BMemberPrivacyModifyForm from '@/components/member/BMemberPrivacyModifyForm.vue'
+import type { MemberUpdateRequest } from '@/services/member/types.ts'
+import { StringUtils } from '@/utils/string'
 
 type MemberModifyForm = InstanceType<typeof BMemberModifyForm>
 type MemberPrivacyModifyForm = InstanceType<typeof BMemberPrivacyModifyForm>
@@ -16,17 +21,73 @@ const { t } = useI18n()
 const memberStore = useMemberStore()
 const { member } = storeToRefs(memberStore)
 
+//  Snackbar Store
+const snackbarStore = useSnackbarStore()
+
+//  Loading Store
+const loadingStore = useLoadingStore()
+const { loading } = storeToRefs(loadingStore)
+
 //  폼 Ref
 const memberModifyForm = ref<MemberModifyForm>()
 const memberPrivacyModifyForm = ref<MemberPrivacyModifyForm>()
 
 const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버시)
 
+/**
+ * 아바타 크롭 완료 시 호출
+ *
+ * @param blob 블롭 파일 객체
+ * @param source 미리보기 문자열
+ */
+async function onCompleteCropAvatar(blob: Blob, source: string) {
+    try {
+        loadingStore.toggle()
+
+        await MemberService.resource({ type: 'AVATAR', isDelete: false }, blob)
+        member.value.avatar = source
+        memberModifyForm.value?.revokeAvatar()
+
+        snackbarStore.show({ text: t('message.updated') })
+    }
+    catch(error: any) {
+        snackbarStore.show({ text: error.message ?? t('message.error') })
+    }
+    finally {
+        loadingStore.toggle(false)
+    }
+}
+
+/**
+ * 사용자 수정 시 호출
+ *
+ * @param data 수정 데이터
+ */
+async function onModify(data: MemberUpdateRequest) {
+    try {
+        loadingStore.toggle()
+
+        await MemberService.update(data)
+
+        member.value.name = StringUtils.hasText(data.name) ? data.name : member.value.name
+        member.value.bio = StringUtils.hasText(data.bio) ? StringUtils.textareaToHtml(data.bio) : member.value.bio
+        member.value.birthday = StringUtils.hasText(data.birthday) ? data.birthday : member.value.birthday
+
+        snackbarStore.show({ text: t('message.updated') })
+    }
+    catch(error: any) {
+        snackbarStore.show({ text: error.message ?? t('message.error') })
+    }
+    finally {
+        loadingStore.toggle(false)
+    }
+}
+
 </script>
 
 <template>
     <v-container fluid>
-        <v-tabs v-model="tab">
+        <v-tabs v-model="tab" :disabled="loading">
             <v-tab :value="0">{{ t('text.profile') }}</v-tab>
             <v-tab :value="1">{{ t('text.privacy') }}</v-tab>
         </v-tabs>
@@ -36,6 +97,9 @@ const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버
             <v-tabs-window-item :value="0">
                 <b-member-modify-form ref="memberModifyForm"
                                       :member="member"
+                                      :loading="loading"
+                                      @crop-avatar="onCompleteCropAvatar"
+                                      @modify="onModify"
                 />
             </v-tabs-window-item>
             <v-tabs-window-item :value="1">
