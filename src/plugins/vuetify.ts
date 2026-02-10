@@ -20,7 +20,13 @@ import { VDateInput } from 'vuetify/labs/components'
 // Composables
 import { createVuetify } from 'vuetify'
 
+//  Vuetify
 import { md3 } from 'vuetify/blueprints'
+import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
+
+//  Vue i18n
+import { useI18n } from 'vue-i18n'
+import { i18n } from '@/plugins/vue-i18n.ts'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -35,6 +41,14 @@ export default createVuetify({
         defaultSet: 'materialSymbols',
         aliases: materialAliases,
         sets: { materialSymbols },
+    },
+    //  언어
+    locale: {
+        adapter: createVueI18nAdapter({
+            //  안정성 보장!!!
+            i18n: i18n as any,
+            useI18n
+        })
     },
     //  테마
     theme: {
