@@ -7,14 +7,14 @@ import { useSnackbarStore } from '@/stores/snackbar'
 const { t } = useI18n()
 
 const snackbarStore = useSnackbarStore()
-const { visible, colour, text, timeout } = storeToRefs(snackbarStore)
+const { visible, colour, text, timeout, showCloseButton } = storeToRefs(snackbarStore)
 
 </script>
 
 <template>
     <v-snackbar v-model="visible" :color="colour" :timeout="timeout" location="bottom left">
         {{ text }}
-        <template #actions>
+        <template v-if="showCloseButton" #actions>
             <v-btn variant="text">{{ t('text.close') }}</v-btn>
         </template>
     </v-snackbar>
