@@ -46,8 +46,9 @@ export interface MemberCreateRequest {
 
 //  사용자 수정 요청
 export interface MemberUpdateRequest {
-    name: string
+    name?: string
     bio?: string
+    birthday?: string
 }
 
 //  아이디, 이메일 사용 가능 여부 확인 요청
@@ -59,4 +60,10 @@ export interface MemberCanUseRequest {
 //  아이디, 이메일 사용 가능 여부 응답
 export interface MemberCanUseResponse {
     canUse: boolean
+}
+
+//  리소스 업로드 요청
+export interface MemberResourceRequest {
+    type: 'AVATAR' | 'BANNER'
+    isDelete: boolean
 }
