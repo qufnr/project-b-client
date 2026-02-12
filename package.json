@@ -2,10 +2,11 @@
     "name": "project-b-client",
     "private": true,
     "type": "module",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "scripts": {
         "dev": "vite",
         "build": "run-p type-check \"build-only {@}\" --",
+        "build:production": "vite --mode production",
         "preview": "vite preview",
         "build-only": "vite build",
         "type-check": "vue-tsc --build --force",
