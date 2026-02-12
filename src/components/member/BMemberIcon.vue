@@ -8,7 +8,11 @@ interface BMemberAvatarIconProps {
     size?: number | string
 }
 
+//  Props
 const { member, src, size } = defineProps<BMemberAvatarIconProps>()
+
+//  서버 정적 리소스 URL
+const serverStaticUrl = import.meta.env.VITE_APP_SERVER_STATIC_URL
 
 //  이름 이니셜
 const nameInitial = computed<string>(() => {
@@ -26,7 +30,7 @@ const nameInitialSize = computed(() => `${Number(size) / 2}px`)
 
 <template>
     <v-avatar :color="member.colour" :size="size" class="select-none">
-        <v-img v-if="member.avatar != null" :src="member.avatar" />
+        <v-img v-if="member.avatar != null" :src="`${serverStaticUrl}avatar/${member.avatar}`" />
         <v-img v-else-if="!!src" :src="src" />
         <p v-else :style="{ fontSize: nameInitialSize }">{{ nameInitial }}</p>
     </v-avatar>

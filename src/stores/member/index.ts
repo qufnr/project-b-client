@@ -7,6 +7,9 @@ import type { Member } from '@/services/member/types.ts'
 import type { SignDetails, AccessDetails } from '@/services/member-sign/types.ts'
 
 export const useMemberStore = defineStore('member', () => {
+    //  서버 정적 리소스 URL
+    const serverStaticUrl = import.meta.env.VITE_APP_SERVER_STATIC_URL
+
     const member = ref<Member>({
         authorities: [],
         avatar: null,
@@ -36,6 +39,8 @@ export const useMemberStore = defineStore('member', () => {
     const isSigned = computed(() => !!member.value.uid && !!cookies.get(cookieNames.token.access))
     //  사용자 이름 반환
     const memberName = computed(() => StringUtils.hasText(member.value.name) ? member.value.name : member.value.id)
+    //  사용자 아바타 URL
+    const memberAvatar = computed(() => StringUtils.hasText(member.value.avatar) ? `${serverStaticUrl}avatar/${member.value.avatar}` : null)
 
     /**
      * 로그인(또는 리프레시) 시 member 상태 변수 업데이트
@@ -75,7 +80,7 @@ export const useMemberStore = defineStore('member', () => {
 
     return {
         member,
-        isSigned, memberName,
+        isSigned, memberName, memberAvatar,
         clear, updateByAccess
     }
 })
