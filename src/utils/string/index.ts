@@ -40,7 +40,7 @@ const textareaToHtml = (value: any): string => {
  * @return 문단을 줄바꿈으로 처리한 문자열
  */
 const htmlToTextarea = (value: any): string =>
-    hasText(value) ? value.replace(/<p>|<\/p>/g, '\n') : ''
+    hasText(value) ? value.replace(/<\/p>/gi, '\n').replace(/<p>/gi, '') : ''
 
 export const StringUtils = {
     hasText, removeHtmlTags, textareaToHtml, htmlToTextarea
