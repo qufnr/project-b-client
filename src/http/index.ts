@@ -3,6 +3,7 @@ import { useCookies } from '@vueuse/integrations/useCookies'
 import router from '@/router'
 import { i18n } from '@/plugins/vue-i18n.ts'
 import { useMemberStore } from '@/stores/member'
+import { useLocaleStore } from '@/stores/locale'
 import { SignService } from '@/services/member-sign'
 import { cookieNames, allowedHeaders } from '@/construct.ts'
 import { StringUtils } from '@/utils/string'
@@ -62,6 +63,9 @@ const onRequestFulfilled = (configurer: InternalAxiosRequestConfig) => {
             configurer.headers[allowedHeaders.authorization] = StringUtils.hasText(accessToken) ? `Bearer ${accessToken}` : ''
             break
     }
+
+    const localeStore = useLocaleStore()
+    configurer.headers['Accept-Language'] = localeStore.locale
 
     return configurer
 }
