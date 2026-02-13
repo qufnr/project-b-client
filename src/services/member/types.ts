@@ -31,7 +31,7 @@ export interface MemberAvatarMenuItem {
     hasEvent: boolean
     disabled: boolean
     route?: string | null
-    subMenuIndex?: string | null
+    subMenuIndex?: number | null
 }
 
 //  사용자 생성 요청
