@@ -15,8 +15,12 @@ interface BMemberModifyFormProps {
 }
 
 interface BMemberModifyFormEmits {
-    modify: [data: MemberUpdateRequest],
-    cropAvatar: [blob: Blob, source: string],
+    //  수정 버튼 클릭 후 호출
+    modify: [data: MemberUpdateRequest]
+    //  아바타 크롭 자르기 버튼 클릭 후 호출
+    cropAvatar: [blob: Blob, source: string]
+    //  아바타 삭제  버튼 클릭 후 호출
+    deleteAvatar: []
 }
 
 interface BMemberModifyFormStates {
@@ -98,9 +102,16 @@ const form = reactive<BMemberModifyFormStates>({
 /**
  * 아바타 변경 버튼 클릭
  */
-function onAvatarChangeClick() {
+function onChangeAvatarClick() {
     if(avatarFileInput.value)
         avatarFileInput.value.click()
+}
+
+/**
+ * 아바타 삭제 버튼 클릭
+ */
+function onDeleteAvatarClick() {
+    emits('deleteAvatar')
 }
 
 /**
@@ -149,7 +160,7 @@ async function onModifyClick() {
 
     emits('modify', {
         name: form.name.value,
-        bio: form.bio.value,
+        bio: StringUtils.textareaToHtml(form.bio.value),
         birthday: form.birthday.value
     })
 }
@@ -164,7 +175,7 @@ function onResetClick() {
     const target = {
         avatar: form.avatar.value,
         name: form.name.value,
-        email: form.email.value,
+        email: StringUtils.textareaToHtml(form.email.value),
         birthday: form.birthday.value,
     }
 
@@ -228,8 +239,8 @@ defineExpose({
                     <b-member-icon :member="member" :src="form.avatar.value" size="132" />
                 </v-card>
                 <div class="d-flex ga-2">
-                    <v-btn :disabled="loading" @click="onAvatarChangeClick">{{ t('text.change')}}</v-btn>
-                    <v-btn variant="outlined" color="secondary" :disabled="loading">{{ t('text.remove') }}</v-btn>
+                    <v-btn :disabled="loading" @click="onChangeAvatarClick">{{ t('text.change')}}</v-btn>
+                    <v-btn variant="outlined" color="secondary" :disabled="loading" @click="onDeleteAvatarClick">{{ t('text.remove') }}</v-btn>
                 </div>
             </div>
             <input type="file" ref="avatarFileInput" @change="onTemplateAvatarChange" class="d-none" />

@@ -35,18 +35,27 @@ const memberPrivacyModifyForm = ref<MemberPrivacyModifyForm>()
 const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버시)
 
 /**
- * 아바타 크롭 완료 시 호출
+ * 아바타 변경 시 호출
  *
  * @param blob 블롭 파일 객체
  * @param source 미리보기 문자열
  */
-async function onCompleteCropAvatar(blob: Blob, source: string) {
+async function onAvatarUpdate(blob?: Blob, source?: string) {
     try {
         loadingStore.toggle()
 
-        await MemberService.resource({ type: 'AVATAR', isDelete: false }, blob)
-        member.value.avatar = source
-        memberModifyForm.value?.revokeAvatar()
+        //  아바타 수정
+        if(blob instanceof Blob && typeof source === 'string') {
+            await MemberService.resource({ type: 'AVATAR', isDelete: false }, blob)
+            member.value.avatar = source
+            memberModifyForm.value?.revokeAvatar()
+        }
+
+        //  아바타 삭제
+        else {
+            await MemberService.resource({ type: 'AVATAR', isDelete: true })
+            member.value.avatar = null
+        }
 
         snackbarStore.show({ text: t('message.updated') })
     }
@@ -70,7 +79,7 @@ async function onModify(data: MemberUpdateRequest) {
         await MemberService.update(data)
 
         member.value.name = StringUtils.hasText(data.name) ? data.name : member.value.name
-        member.value.bio = StringUtils.hasText(data.bio) ? StringUtils.textareaToHtml(data.bio) : member.value.bio
+        member.value.bio = StringUtils.hasText(data.bio) ? data.bio : member.value.bio
         member.value.birthday = StringUtils.hasText(data.birthday) ? data.birthday : member.value.birthday
 
         snackbarStore.show({ text: t('message.updated') })
@@ -98,7 +107,8 @@ async function onModify(data: MemberUpdateRequest) {
                 <b-member-modify-form ref="memberModifyForm"
                                       :member="member"
                                       :loading="loading"
-                                      @crop-avatar="onCompleteCropAvatar"
+                                      @crop-avatar="onAvatarUpdate"
+                                      @delete-avatar="onAvatarUpdate"
                                       @modify="onModify"
                 />
             </v-tabs-window-item>
