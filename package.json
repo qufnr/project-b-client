@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "scripts": {
         "dev": "vite",
+        "dev:company": "vite --mode company",
         "build": "run-p type-check \"build-only {@}\" --",
         "build:production": "vite --mode production",
         "preview": "vite preview",
