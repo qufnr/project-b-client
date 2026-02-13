@@ -114,9 +114,9 @@ const nativeOptions = computed<NativeOption>(() => ({
 }))
 
 /**
- * 다음, 로그인 눌렀을 때 호출
+ * 다음, 로그인 눌렀을 때(또는 필드에서 Enter 입력했을 때) 호출
  */
-async function onNextClick() {
+async function handleNext() {
     try {
         state.loading = true
 
@@ -242,7 +242,7 @@ onUnmounted(() => {
                         <v-window v-model="state.step" class="">
                             <!-- 계정 입력 -->
                             <v-window-item :value="0">
-                                <v-form ref="inputIdForm" class="d-flex flex-column mt-2">
+                                <v-form ref="inputIdForm" class="d-flex flex-column mt-2" @submit.prevent="handleNext">
                                     <v-text-field v-model="state.id.value"
                                                   variant="outlined"
                                                   :label="t('text.member.memberAccountOrEmail')"
@@ -254,14 +254,14 @@ onUnmounted(() => {
                                     <v-spacer class="my-4" />
                                     <div class="text-end">
                                         <v-btn :to="{ name: 'sign-up' }" variant="text" color="secondary" class="mr-2">{{ t('text.signUp') }}</v-btn>
-                                        <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.next') }}</v-btn>
+                                        <v-btn @click="handleNext" :disabled="state.loading">{{ t('text.next') }}</v-btn>
                                     </div>
                                 </v-form>
                             </v-window-item>
 
                             <!-- 비밀번호 입력 -->
                             <v-window-item :value="1">
-                                <v-form ref="inputPasswordForm" class="d-flex flex-column my-2">
+                                <v-form ref="inputPasswordForm" class="d-flex flex-column my-2" @submit.prevent="handleNext">
                                     <v-text-field v-model="state.password.value"
                                                   variant="outlined"
                                                   type="password"
@@ -274,7 +274,7 @@ onUnmounted(() => {
                                     <v-spacer class="my-4" />
                                     <div class="text-end">
                                         <v-btn @click="onSignAnotherAccountClick" variant="text" class="mr-2">{{ t('text.signInRetryAnotherAccount') }}</v-btn>
-                                        <v-btn @click="onNextClick" :disabled="state.loading">{{ t('text.signIn') }}</v-btn>
+                                        <v-btn @click="handleNext" :disabled="state.loading">{{ t('text.signIn') }}</v-btn>
                                     </div>
                                 </v-form>
                             </v-window-item>
