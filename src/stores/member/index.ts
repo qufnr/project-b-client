@@ -39,8 +39,6 @@ export const useMemberStore = defineStore('member', () => {
     const isSigned = computed(() => !!member.value.uid && !!cookies.get(cookieNames.token.access))
     //  사용자 이름 반환
     const memberName = computed(() => StringUtils.hasText(member.value.name) ? member.value.name : member.value.id)
-    //  사용자 아바타 URL
-    const memberAvatar = computed(() => StringUtils.hasText(member.value.avatar) ? `${serverStaticUrl}avatar/${member.value.avatar}` : null)
 
     /**
      * 로그인(또는 리프레시) 시 member 상태 변수 업데이트
@@ -80,7 +78,7 @@ export const useMemberStore = defineStore('member', () => {
 
     return {
         member,
-        isSigned, memberName, memberAvatar,
+        isSigned, memberName,
         clear, updateByAccess
     }
 })

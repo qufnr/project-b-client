@@ -26,11 +26,21 @@ const nameInitial = computed<string>(() => {
 
 //  이름 이니셜 크기
 const nameInitialSize = computed(() => `${Number(size) / 2}px`)
+
+//  Src
+const avatarSrc = computed(() => {
+    if(member.avatar != null)
+        return member.avatar.startsWith('blob:') ?
+            member.avatar :
+            `${serverStaticUrl}avatar/${member.avatar}`
+
+    return null
+})
 </script>
 
 <template>
     <v-avatar :color="member.avatar != null ? undefined : member.colour" :size="size" class="select-none">
-        <v-img v-if="member.avatar != null" :src="`${serverStaticUrl}avatar/${member.avatar}`" />
+        <v-img v-if="avatarSrc != null" :src="avatarSrc" />
         <v-img v-else-if="!!src" :src="src" />
         <p v-else :style="{ fontSize: nameInitialSize }">{{ nameInitial }}</p>
     </v-avatar>

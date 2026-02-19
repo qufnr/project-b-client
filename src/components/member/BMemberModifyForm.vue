@@ -219,6 +219,7 @@ defineExpose({
 </script>
 
 <template>
+    <!-- 아바타 크로퍼 -->
     <b-cropper v-model="templateAvatar"
                :title="t('text.member.avatarCrop')"
                :close-text="t('text.cancel')"
