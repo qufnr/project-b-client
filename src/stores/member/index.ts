@@ -10,7 +10,8 @@ export const useMemberStore = defineStore('member', () => {
     //  서버 정적 리소스 URL
     const serverStaticUrl = import.meta.env.VITE_APP_SERVER_STATIC_URL
 
-    const member = ref<Member>({
+    //  사용자 초기 값
+    const initializeMember: Member = {
         authorities: [],
         avatar: null,
         banner: null,
@@ -26,11 +27,14 @@ export const useMemberStore = defineStore('member', () => {
         lastSignedAt: "",
         name: null,
         privacy: {
-            isPublic: false,
-            isBirthdayPublic: false,
+            profile: 'PUBLIC',
+            birthday: 'FOLLOW_ONLY',
+            feed: 'PUBLIC'
         },
         uid: 0
-    })
+    }
+
+    const member = ref<Member>(initializeMember)
 
     //  토큰 쿠키
     const cookies = useCookies([cookieNames.token.sign, cookieNames.token.access, cookieNames.token.refresh])
@@ -53,27 +57,7 @@ export const useMemberStore = defineStore('member', () => {
      * 사용자 정보 삭제 (로그아웃)
      */
     const clear = () => {
-        member.value = {
-            authorities: [],
-            avatar: null,
-            banner: null,
-            email: '',
-            bio: null,
-            colour: '',
-            birthday: null,
-            id: '',
-            isEnabled: false,
-            isLocked: false,
-            isVerified: false,
-            lastNameChangedDate: null,
-            lastSignedAt: "",
-            name: null,
-            privacy: {
-                isPublic: false,
-                isBirthdayPublic: false,
-            },
-            uid: 0
-        }
+        member.value = initializeMember
     }
 
     return {

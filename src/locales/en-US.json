@@ -100,9 +100,9 @@
             "memberAvatar": "Avatar",
             "memberBio": "Bio",
             "memberBirthday": "Birthday",
-            "profilePublic": "Profile Public",
-            "birthdayPublic": "Birthday Public",
-            "playlistPublic": "Playlist Public",
+            "privacyProfile": "Profile",
+            "privacyBirthday": "Birthday",
+            "privacyFeed": "Feed",
             "avatarCrop": "Crop Avatar",
             "avatarUpload": "Avatar Upload",
             "avatarUploadFailed": "Avatar Upload Failed"
@@ -160,7 +160,7 @@
             "firstCreateAccount": "You’ve just created your account! We've sent a verification email to {0}. If you haven't received it, please click the \"Resend Verification\" button.",
             "privacyPublic": "Set whether your profile can be viewed by other members.",
             "privacyBirthday": "Set whether other members can see your birthday.",
-            "privacyPlaylist": "Set whether other members can see your playlist."
+            "privacyFeed": "Set whether other members can see your feeds."
         },
         "placeholder": {
             "date": "MM/DD/YYYY"

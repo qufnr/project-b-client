@@ -20,6 +20,12 @@ import { cookieNames, storageNames } from '@/construct.ts'
 import { useMemberStore } from '@/stores/member'
 import { MemberService } from '@/services/member'
 
+//  Enumeration Store
+import { useEnumStore } from '@/stores/enumeration'
+
+//  Snackbar Store
+import { useSnackbarStore } from '@/stores/snackbar'
+
 //  Layout Components
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
@@ -55,7 +61,25 @@ const router = createRouter({
     // routes: setupLayouts(routes),
 })
 
+/**
+ * 라우트 이동 전에 열거형 변수 긁어오기
+ */
+async function initializeEnums() {
+    try {
+        const enumStore = useEnumStore()
+
+        if(enumStore.isEnumsEmpty)
+            await enumStore.initialize()
+    }
+    catch(error: any) {
+        const snackbarStore = useSnackbarStore()
+        snackbarStore.show({ text: error.message, timeout: 2000 })
+    }
+}
+
 router.beforeEach(async (to, from, next) => {
+    await initializeEnums()
+
     const cookies = useCookies([cookieNames.token.access, cookieNames.token.refresh])
     if(StringUtils.hasText(cookies.get(cookieNames.token.access))) {
         try {

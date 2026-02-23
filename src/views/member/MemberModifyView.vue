@@ -6,13 +6,14 @@ import { useMemberStore } from '@/stores/member'
 import { useSnackbarStore } from '@/stores/snackbar'
 import { useLoadingStore } from '@/stores/loading'
 import { MemberService } from '@/services/member'
-import BMemberModifyForm from '@/components/member/BMemberModifyForm.vue'
-import BMemberPrivacyModifyForm from '@/components/member/BMemberPrivacyModifyForm.vue'
-import type { MemberUpdateRequest } from '@/services/member/types.ts'
 import { StringUtils } from '@/utils/string'
+import BMemberModifyForm from '@/components/member/BMemberModifyForm.vue'
+import BMemberPrivacyForm from '@/components/member/BMemberPrivacyForm.vue'
+import type { MemberUpdateRequest } from '@/services/member/types.ts'
+import type { MemberPrivacy } from '@/services/member-privacy/types.ts'
 
 type MemberModifyForm = InstanceType<typeof BMemberModifyForm>
-type MemberPrivacyModifyForm = InstanceType<typeof BMemberPrivacyModifyForm>
+type MemberPrivacyForm = InstanceType<typeof BMemberPrivacyForm>
 
 //  Vue I18n
 const { t } = useI18n()
@@ -30,7 +31,7 @@ const { loading } = storeToRefs(loadingStore)
 
 //  폼 Ref
 const memberModifyForm = ref<MemberModifyForm>()
-const memberPrivacyModifyForm = ref<MemberPrivacyModifyForm>()
+const memberPrivacyForm = ref<MemberPrivacyForm>()
 
 const tab = ref<number>(0)          //  탭 번호 (0 - 일반, 1 - 프라이버시)
 
@@ -92,6 +93,22 @@ async function onModify(data: MemberUpdateRequest) {
     }
 }
 
+/**
+ * 사용자 프라이버시 수정 시 호출
+ *
+ * @param data 수정 데이터
+ */
+async function onPrivacyModify(data: MemberPrivacy) {
+    try {
+        loadingStore.toggle()
+
+        //  TODO :: 프라이버시 업데이트 API 추가
+    }
+    finally {
+        loadingStore.toggle(false)
+    }
+}
+
 </script>
 
 <template>
@@ -113,8 +130,10 @@ async function onModify(data: MemberUpdateRequest) {
                 />
             </v-tabs-window-item>
             <v-tabs-window-item :value="1">
-                <b-member-privacy-modify-form ref="memberPrivacyModifyForm"
-                                              :member="member"
+                <b-member-privacy-form ref="memberPrivacyForm"
+                                       :loading="loading"
+                                       :member="member"
+                                       @modify="onPrivacyModify"
                 />
             </v-tabs-window-item>
         </v-tabs-window>

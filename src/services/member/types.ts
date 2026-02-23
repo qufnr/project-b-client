@@ -1,3 +1,6 @@
+import type { MemberFollowStatus } from '@/services/member-follow/types.ts'
+import type { MemberPrivacy, MemberPrivacyUpdateRequest } from '@/services/member-privacy/types.ts'
+
 //  사용자 정보
 export interface Member {
     uid: number
@@ -14,14 +17,9 @@ export interface Member {
     isLocked: boolean
     isEnabled: boolean
     isVerified: boolean
+    followStatus?: MemberFollowStatus
     privacy: MemberPrivacy
     authorities: string[]
-}
-
-//  프라이버시
-export interface MemberPrivacy {
-    isPublic: boolean
-    isBirthdayPublic: boolean
 }
 
 //  사용자 아바타 메뉴 항목
@@ -49,6 +47,7 @@ export interface MemberUpdateRequest {
     name?: string
     bio?: string
     birthday?: string
+    privacy?: MemberPrivacyUpdateRequest
 }
 
 //  아이디, 이메일 사용 가능 여부 확인 요청
