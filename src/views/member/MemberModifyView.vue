@@ -102,7 +102,13 @@ async function onPrivacyModify(data: MemberPrivacy) {
     try {
         loadingStore.toggle()
 
-        //  TODO :: 프라이버시 업데이트 API 추가
+        await MemberService.update({ privacy: data })
+        member.value.privacy = data
+
+        snackbarStore.show({ text: t('message.updated') })
+    }
+    catch(error: any) {
+        snackbarStore.show({ text: error.message ?? t('message.error') })
     }
     finally {
         loadingStore.toggle(false)
