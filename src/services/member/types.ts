@@ -22,6 +22,13 @@ export interface Member {
     authorities: string[]
 }
 
+export interface ShortMember {
+    uid: number
+    id: string
+    name?: string | null
+    authorities: string[]
+}
+
 //  사용자 아바타 메뉴 항목
 export interface MemberAvatarMenuItem {
     icon: string
