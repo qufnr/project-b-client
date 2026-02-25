@@ -6,6 +6,17 @@ export interface ApiResponse<T> {
     message?: string
 }
 
+//  페이지네이션 응답
+export interface PaginationResponse<T> {
+    items: T[]
+    pagination: {
+        page: number
+        size: number
+        totalItems: number
+        totalPages: number
+    }
+}
+
 //  토큰 리프레시 구독 상태 타입
 export interface RefreshStatus {
     pending: boolean
