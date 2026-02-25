@@ -13,6 +13,8 @@ const { t } = i18n.global
 
 //  API 주소
 const appServerUrl: string = import.meta.env.VITE_APP_SERVER_URL
+//  Timeout
+const timeout: number = Number(import.meta.env.VITE_APP_SERVER_CONNECT_TIMEOUT)
 
 //  쿠키
 const cookies = useCookies([cookieNames.token.sign, cookieNames.token.access, cookieNames.token.refresh])
@@ -26,7 +28,7 @@ const refresh: RefreshStatus = {
 //  Axios 인스턴스
 const instance = axios.create({
     baseURL: appServerUrl,
-    timeout: 10000
+    timeout
 })
 
 /**
