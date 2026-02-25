@@ -91,10 +91,7 @@ function onMenuItemClick(item: MemberAvatarMenuItem) {
     }
 }
 
-onMounted(() => {
-    console.log('lang list', usableLocales.value)
-    console.log('theme list', usableThemes.value)
-})
+onMounted(() => {})
 </script>
 
 <template>
