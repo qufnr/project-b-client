@@ -1,7 +1,15 @@
 import { Client, type IFrame, type IMessage } from '@stomp/stompjs'
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { cookieNames } from '@/construct.ts'
 import { ref, type Ref } from 'vue'
 
-const reconnectDelay = import.meta.env.VITE_APP_SERVER_STOMP_RECONNECT_DELAY
+const wsUrl = import.meta.env.VITE_APP_SERVER_WS_URL
+const reconnectDelay = import.meta.env.VITE_APP_SERVER_WS_RECONNECT_DELAY
+
+interface StompOptions {
+    authenticated: boolean
+    headers: Record<string, string>
+}
 
 export function useStomp<T>() {
     const client = ref<Client | null>(null)
@@ -12,12 +20,18 @@ export function useStomp<T>() {
      * 연결
      *
      * @param url 브로커 URL
-     * @param headers 해더 내용
+     * @param options 옵션
      */
-    function connect(url: string, headers: Record<string, string> = {}) {
+    function connect(url: string = wsUrl, options: StompOptions = { authenticated: false, headers: {} }) {
+        //  authenticated가 true일 경우 사용자 JWT 긁어와서 StompClient에 뿌리기
+        if(options.authenticated) {
+            const cookies = useCookies([cookieNames.token.access])
+            options.headers['Authorization'] = `Bearer ${cookies.get(cookieNames.token.access)}`
+        }
+
         client.value = new Client({
             brokerURL: url,
-            connectHeaders: headers,
+            connectHeaders: options.headers,
             debug: (msg: string) => {
                 console.log(`[STOMP] ${msg}`)
             },
