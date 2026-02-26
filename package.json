@@ -20,7 +20,7 @@
         "@vueuse/core": "^14.1.0",
         "@vueuse/integrations": "^14.1.0",
         "async-validator": "^4",
-        "axios": "^1.13.2",
+        "axios": "^1.13.5",
         "material-symbols": "^0.40.2",
         "pinia": "^3.0.3",
         "sockjs-client": "^1.6.1",
@@ -29,7 +29,7 @@
         "vue-advanced-cropper": "^2.8.9",
         "vue-i18n": "11",
         "vue-router": "^4.5.1",
-        "vuetify": "^4.0.0-alpha.0"
+        "vuetify": "^4.0.0"
     },
     "devDependencies": {
         "@tsconfig/node22": "^22.0.0",
