@@ -27,7 +27,7 @@ export interface NotificationDeleteRequest {
 }
 
 //  알림 응답
-export interface NotificationResponse {
+export interface NotificationDetails {
     uid: number
     receiver: ShortMember
     sender?: ShortMember | null

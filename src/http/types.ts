@@ -17,6 +17,12 @@ export interface PaginationResponse<T> {
     }
 }
 
+//  페이지네이션 기본 요청
+export interface PaginationRequest {
+    page: number
+    size: number
+}
+
 //  토큰 리프레시 구독 상태 타입
 export interface RefreshStatus {
     pending: boolean

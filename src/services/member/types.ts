@@ -26,6 +26,8 @@ export interface ShortMember {
     uid: number
     id: string
     name?: string | null
+    avatar?: string | null
+    colour: string
     authorities: string[]
 }
 
