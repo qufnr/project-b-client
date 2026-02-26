@@ -188,6 +188,9 @@
                 "invalidAvatarFile": "아바타 파일이 이상해요"
             }
         },
+        "notification": {
+            "empty": "알림이 없어요"
+        },
         "party": {
             "_comment": "### 파티 관련 메시지 ###",
             "noParty": "파티가 없어요. 첫 번째 파티의 주인이 되어보세요!",

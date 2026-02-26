@@ -187,6 +187,9 @@
                 "invalidAvatarFile": "Invalid avatar file format."
             }
         },
+        "notification": {
+            "empty": "No notifications"
+        },
         "party": {
             "_comment": "### 파티 관련 메시지 ###",
             "noParty": "No party. Be the owner of the first party!",
