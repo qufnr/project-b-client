@@ -3,7 +3,7 @@ import type { PaginationResponse } from '@/http/types.ts'
 import type {
     NotificationDeleteRequest,
     NotificationReadRequest,
-    NotificationResponse,
+    NotificationDetails,
     NotificationUpdateRequest
 } from '@/services/notification/types.ts'
 
@@ -15,7 +15,7 @@ export const NotificationService = {
      * @return 페이지 응답
      */
     read: async (request: NotificationReadRequest) =>
-        (await http.get<PaginationResponse<NotificationResponse>>(`notification-management/notifications`, { params: request })).data,
+        (await http.get<PaginationResponse<NotificationDetails>>(`notification-management/notifications`, { params: request })).data,
 
     /**
      * 알림 수정 (읽음 처리)
