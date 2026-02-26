@@ -7,8 +7,9 @@ const wsUrl = import.meta.env.VITE_APP_SERVER_WS_URL
 const reconnectDelay = import.meta.env.VITE_APP_SERVER_WS_RECONNECT_DELAY
 
 interface StompOptions {
-    authenticated: boolean
-    headers: Record<string, string>
+    brokerUrl?: string
+    authenticated?: boolean
+    headers?: Record<string, string>
 }
 
 export function useStomp<T>() {
@@ -19,18 +20,20 @@ export function useStomp<T>() {
     /**
      * 연결
      *
-     * @param url 브로커 URL
      * @param options 옵션
      */
-    function connect(url: string = wsUrl, options: StompOptions = { authenticated: false, headers: {} }) {
+    function connect(options?: StompOptions) {
+        const defaultOptions = { brokerUrl: wsUrl, authenticated: false, headers: {} }
+        options = options == null ? defaultOptions : { ...defaultOptions, ...options }
+
         //  authenticated가 true일 경우 사용자 JWT 긁어와서 StompClient에 뿌리기
         if(options.authenticated) {
             const cookies = useCookies([cookieNames.token.access])
-            options.headers['Authorization'] = `Bearer ${cookies.get(cookieNames.token.access)}`
+            options.headers!['Authorization'] = `Bearer ${cookies.get(cookieNames.token.access)}`
         }
 
         client.value = new Client({
-            brokerURL: url,
+            brokerURL: options.brokerUrl,
             connectHeaders: options.headers,
             debug: (msg: string) => {
                 console.log(`[STOMP] ${msg}`)
